@@ -1,0 +1,55 @@
+services:
+  backend:
+    env_file: &common_env
+      - .env.${ENVIRONMENT}.local
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+ 
+  frontend:
+    image: apps/frontend
+    env_file: *common_env
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    env_file:
+      - .env.${ENVIRONMENT}.local
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /data/postgres
+      POSTGRES_DB: public
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5433:5432
+    networks:
+      - postgres
+
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - .env.${ENVIRONMENT}.local
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

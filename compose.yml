@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    env_file: .env.development.local
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - postgres
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    env_file: .env.development.local
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  db_data:
+  pgadmin_data:
