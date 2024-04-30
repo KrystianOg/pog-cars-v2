@@ -1,40 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { client } from '../db/client';
-import {
-  type Agency,
-  type AgencyCreate,
-  type AgencyUpdate,
-  agencyUpdateSchema,
-  agencyCreateSchema,
-} from './agencies.schema';
-
-type Query<T> = (c: typeof client) => Promise<T>;
-
-async function transaction<T>(query: Query<T>): Promise<T> {
-  try {
-    await client.query('BEGIN');
-    const res = await query(client);
-    await client.query('COMMIT');
-    return res;
-  } catch (e) {
-    await client.query('ROLLBACK');
-    throw e;
-  } finally {
-    // TODO: check if this finally does not mess up with return in try block
-    await client.end();
-  }
-}
-
-transaction(async (client) => {
-  await client.query('SELECT * FROM smth');
-  await client.query('UPDATE ...');
-  await client.query('UPDATE ...');
-});
+import type { Agency, AgencyCreate, AgencyUpdate } from './agencies.schema';
 
 @Injectable()
 export class AgenciesService {
   async create(agency: AgencyCreate): Promise<Agency> {
-    agency = agencyCreateSchema.parse(agency);
     const address = agency.address;
     const res = await client.query<Agency>({
       text: `WITH inserted_address AS (
@@ -75,27 +45,24 @@ export class AgenciesService {
   }
 
   async update(agency: AgencyUpdate): Promise<Agency> {
-    agency = agencyUpdateSchema.parse(agency);
-
     const res = await client.query<Agency>({
-      text: 'SELECT * FROM ... RETURNING *',
-      values: [agency.id],
+      text: `UPDATE agencies 
+          name = COALESCE($1, name)`,
+      values: [agency.name],
     });
 
     return res.rows[0];
   }
 
-  async softDelete(id: number): Promise<void> {
-    client.query({
-      text: 'UPDATE agencies SET deleted_at = NOW() WHERE id = $1',
-      values: [id],
+  async softDelete(id: number): Promise<boolean> {
+    return new Promise((resolve) => {
+      resolve(true);
     });
   }
 
-  async hardDelete(id: number): Promise<void> {
-    client.query({
-      text: 'DELETE FROM agencies WHERE id =$1',
-      values: [id],
-    });
+  async hardDelete(id: number): Promise<boolean> {
+    return new Promise((resolve) => {
+      resolve(true)
+    })
   }
 }

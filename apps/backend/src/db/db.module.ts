@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 import { Pool } from 'pg';
+import { DbService } from './db.service';
+
+export const PG_CONNECTION = 'PG_CONNECTION';
 
 const dbProvider = {
-  provide: process.env.PG_CONNECTION_STRING,
+  provide: PG_CONNECTION,
   useValue: new Pool({
     user: 'admin',
     host: 'localhost',
@@ -11,5 +14,8 @@ const dbProvider = {
     port: 5432,
   }),
 };
-@Module({ providers: [dbProvider], exports: [dbProvider] })
+@Module({
+  providers: [dbProvider, DbService],
+  exports: [dbProvider],
+})
 export class DbModule {}

@@ -6,10 +6,9 @@ import {
   Get,
   Post,
   Request,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard, Public } from './auth.guard';
+import { Public } from './auth.guard';
 
 type SignIn = {
   email: string;
@@ -34,7 +33,6 @@ export class AuthController {
     return this.authService.signUp(signUp.email, signUp.password);
   }
 
-  @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req: unknown) {
     // FIXME: type of request here

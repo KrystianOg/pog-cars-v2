@@ -2,12 +2,15 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  SetMetadata,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { SetMetadata } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+
+export const IS_PUBLIC_KEY = 'isPublic';
+export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,11 +24,9 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-
     if (isPublic) {
       return true;
     }
-
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
@@ -37,7 +38,7 @@ export class AuthGuard implements CanActivate {
       secret: process.env.JWT_SECRET,
     });
 
-    request.user = payload;
+    request['user'] = payload;
 
     return true;
   }
@@ -47,6 +48,3 @@ export class AuthGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 }
-
-export const IS_PUBLIC_KEY = 'isPublic';
-export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
