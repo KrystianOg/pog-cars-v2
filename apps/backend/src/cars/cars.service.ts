@@ -1,14 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { client } from '../db/client';
+import { Inject, Injectable } from '@nestjs/common';
 import type { Car, CarCreate, CarUpdate } from './cars.schema';
 import { carCreateSchema, carUpdateSchema } from './cars.schema';
+import { PG_CONNECTION } from 'src/db/db.module';
+import { Pool } from 'pg';
 
 @Injectable()
 export class CarsService {
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
+
   async create(car: CarCreate): Promise<Car> {
     car = carCreateSchema.parse(car);
 
-    const res = await client.query<Car>({
+    const res = await this.conn.query<Car>({
       text: 'INSERT INTO cars (mileage, horsepower, seats, drivetrain, price, year, model, make) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
       values: [
         car.mileage,
@@ -26,7 +29,7 @@ export class CarsService {
   }
 
   async findAll(): Promise<Car[]> {
-    const res = await client.query<Car>({
+    const res = await this.conn.query<Car>({
       text: 'SELECT * FROM cars',
     });
 
@@ -34,7 +37,7 @@ export class CarsService {
   }
 
   async findOne(id: number): Promise<Car> {
-    const res = await client.query<Car>({
+    const res = await this.conn.query<Car>({
       text: 'SELECT * FROM cars WHERE id = $1',
       values: [id],
     });
@@ -47,7 +50,7 @@ export class CarsService {
   async update(car: CarUpdate): Promise<Car> {
     car = carUpdateSchema.parse(car);
 
-    const res = await client.query<Car>({
+    const res = await this.conn.query<Car>({
       text: `UPDATE cars SET 
         mileage = COALESCE($1, mileage), 
         horsepower = COALESCE($2, horsepower), 
@@ -75,14 +78,14 @@ export class CarsService {
   }
 
   async softDelete(id: number): Promise<void> {
-    await client.query({
+    await this.conn.query({
       text: 'UPDATE cars SET deleted_at = NOW() WHERE id = $1',
       values: [id],
     });
   }
 
-  async hardDelete(id: number) {
-    await client.query({
+  async hardDelete(id: number): Promise<void> {
+    await this.conn.query({
       text: 'DELETE FROM cars WHERE id = $1',
       values: [id],
     });

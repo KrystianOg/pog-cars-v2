@@ -7,7 +7,11 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.get(Roles, context.getHandler());
+    let roles = this.reflector.get(Roles, context.getHandler());
+
+    if (!Array.isArray(roles)) {
+      roles = [roles];
+    }
 
     if (!roles) {
       return true;
@@ -19,7 +23,7 @@ export class RolesGuard implements CanActivate {
     return this.matchRoles(roles, user);
   }
 
-  private matchRoles(roles: Role[], user: any): boolean {
+  private matchRoles(roles: Role[], userId: number): boolean {
     return true;
   }
 }

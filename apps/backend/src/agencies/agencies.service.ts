@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { client } from '../db/client';
+import { Inject, Injectable } from '@nestjs/common';
 import type { Agency, AgencyCreate, AgencyUpdate } from './agencies.schema';
+import { PG_CONNECTION } from 'src/db/db.module';
+import { Pool } from 'pg';
 
 @Injectable()
 export class AgenciesService {
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
+
   async create(agency: AgencyCreate): Promise<Agency> {
     const address = agency.address;
-    const res = await client.query<Agency>({
+    const res = await this.conn.query<Agency>({
       text: `WITH inserted_address AS (
           INSERT INTO addresses (street, city, state, postal_code, country)
           VALUES ($1, $2, $3, $4, $5)
@@ -28,7 +31,7 @@ export class AgenciesService {
   }
 
   async findAll(): Promise<Agency[]> {
-    const res = await client.query<Agency>({
+    const res = await this.conn.query<Agency>({
       text: 'SELECT * from agencies',
     });
 
@@ -36,7 +39,7 @@ export class AgenciesService {
   }
 
   async findOne(id: number): Promise<Agency> {
-    const res = await client.query<Agency>({
+    const res = await this.conn.query<Agency>({
       text: 'SELECT * FROM agencies WHERE id = $1',
       values: [id],
     });
@@ -45,7 +48,7 @@ export class AgenciesService {
   }
 
   async update(agency: AgencyUpdate): Promise<Agency> {
-    const res = await client.query<Agency>({
+    const res = await this.conn.query<Agency>({
       text: `UPDATE agencies 
           name = COALESCE($1, name)`,
       values: [agency.name],
@@ -54,15 +57,17 @@ export class AgenciesService {
     return res.rows[0];
   }
 
-  async softDelete(id: number): Promise<boolean> {
-    return new Promise((resolve) => {
-      resolve(true);
+  async softDelete(id: number): Promise<void> {
+    await this.conn.query({
+      text: 'UPDATE agencies SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1',
+      values: [id],
     });
   }
 
-  async hardDelete(id: number): Promise<boolean> {
-    return new Promise((resolve) => {
-      resolve(true)
-    })
+  async hardDelete(id: number): Promise<void> {
+    await this.conn.query({
+      text: 'DELETE FROM agencies WHERE id = $1',
+      values: [id],
+    });
   }
 }

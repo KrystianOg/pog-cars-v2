@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
 import { DbModule } from './db/db.module';
+import { RentalsModule } from './rentals/rentals.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DbModule } from './db/db.module';
       ],
     }),
     DbModule,
+    RentalsModule,
   ],
   controllers: [AppController, AgenciesController],
   providers: [AppService, AgenciesService, UsersService],

@@ -1,6 +1,5 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { Pool } from 'pg';
-import { DbService } from './db.service';
 
 export const PG_CONNECTION = 'PG_CONNECTION';
 
@@ -14,8 +13,10 @@ const dbProvider = {
     port: 5432,
   }),
 };
+
+@Global()
 @Module({
-  providers: [dbProvider, DbService],
+  providers: [dbProvider],
   exports: [dbProvider],
 })
 export class DbModule {}
