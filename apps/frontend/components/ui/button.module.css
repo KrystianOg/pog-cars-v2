@@ -1,0 +1,17 @@
+.button {
+  border-width: 0;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.button:hover {
+}
+
+.light {
+
+}
+
+.destructive {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
