@@ -5,15 +5,11 @@
 
 -- enums 
 -- https://stackoverflow.com/a/10984951
-drop type if exists country_code cascade;
 create type country_code as ENUM ('PL', 'DE', 'FR', 'US', 'UK');
 
-drop type if exists drivetrain cascade;
 create type drivetrain as ENUM ('FWD', 'RWD', '4WD', 'AWD');
 
 -- on UPDATE update updated_at column
-DROP FUNCTION IF EXISTS update_updated_column CASCADE;
-
 CREATE OR REPLACE FUNCTION update_updated_column()
 	RETURNS TRIGGER AS $$
 	BEGIN
@@ -22,14 +18,27 @@ CREATE OR REPLACE FUNCTION update_updated_column()
 	END;
 $$ language 'plpgsql';
 
--- addresses
-drop table if exists addresses cascade;
+-- users
+create table users (
+  id serial primary key,
+  created_at timestamp with time zone not null default current_timestamp,
+  updated_at timestamp with time zone not null default current_timestamp,
+  deleted_at timestamp with time zone,
+  --
+  username text,
+  email text not null CHECK (char_length(email) <= 320) unique,
+  password text not null -- salted and hashed
+);
 
+CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE update_updated_column();
+
+-- addresses
 create table addresses (
     id serial primary key,
     created_at timestamp with time zone not null default current_timestamp,
     updated_at timestamp with time zone not null default current_timestamp,
     deleted_at timestamp with time zone,
+    created_by int references users(id) on delete set null,
     -- 
     street text not null, 
     city text not null,
@@ -38,50 +47,31 @@ create table addresses (
     country COUNTRY_CODE not null
 );
 
-DROP TRIGGER IF EXISTS update_addresses_updated_at ON addresses C/ASCADE;
 CREATE TRIGGER update_addresses_updated_at BEFORE UPDATE ON addresses FOR EACH ROW EXECUTE PROCEDURE update_updated_column();
 
 -- agencies
-drop table if exists agencies cascade;
-
 create table agencies (
     id serial primary key,
     created_at timestamp with time zone not null default current_timestamp,
     updated_at timestamp with time zone not null default current_timestamp,
     deleted_at timestamp with time zone,
+    created_by int references users(id) on delete set null,
+    -- 
     --
     name text not null,
     address_id int not null references addresses(id) on delete cascade
 );
 
-DROP TRIGGER IF EXISTS update_agencies_updated_at ON agencies CASCADE;
 CREATE TRIGGER update_agencies_updated_at BEFORE UPDATE ON agencies FOR EACH ROW EXECUTE PROCEDURE update_updated_column();
 
--- users
-drop table if exists users cascade;
-
-create table users (
-	id serial primary key,
-	created_at timestamp with time zone not null default current_timestamp,
-	updated_at timestamp with time zone not null default current_timestamp,
-	deleted_at timestamp with time zone,
-    --
-    username text,
-    email text not null CHECK (char_length(email) <= 320),
-    password text not null -- salted and hashed
-);
-
-DROP TRIGGER IF EXISTS update_users_updated_at ON users CASCADE;
-CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE update_updated_column();
-
 -- cars
-drop table if exists cars cascade;
-
 create table cars (
     id serial primary key,
-	created_at timestamp with time zone not null default current_timestamp,
-	updated_at timestamp with time zone not null default current_timestamp,
-	deleted_at timestamp with time zone,
+    created_at timestamp with time zone not null default current_timestamp,
+    updated_at timestamp with time zone not null default current_timestamp,
+    deleted_at timestamp with time zone,
+    created_by int references users(id) on delete set null,
+    -- 
     --
     mileage int not null CHECK (mileage >= 0),
     horsepower int not null CHECK (horsepower >= 0),
@@ -93,21 +83,20 @@ create table cars (
     make text not null
 );
 
-DROP TRIGGER IF EXISTS update_cars_updated_at ON cars CASCADE;
 CREATE TRIGGER update_cars_updated_at BEFORE UPDATE ON cars FOR EACH ROW EXECUTE PROCEDURE update_updated_column();
 
 -- rentals
-drop table if exists rentals cascade;
 
 create table rentals (
-	id serial primary key,
-	created_at timestamp with time zone not null default current_timestamp,
-	updated_at timestamp with time zone not null default current_timestamp,
-	deleted_at timestamp with time zone,
+    id serial primary key,
+    created_at timestamp with time zone not null default current_timestamp,
+    updated_at timestamp with time zone not null default current_timestamp,
+    deleted_at timestamp with time zone,
+    created_by int references users(id) on delete set null,
+    -- 
     --
     car_id int not null references cars(id) on delete cascade,
     user_id int not null references users(id) on delete cascade
 );
 
-DROP TRIGGER IF EXISTS update_rentals_updated_at ON users CASCADE;
 CREATE TRIGGER update_rentals_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE update_updated_column();
