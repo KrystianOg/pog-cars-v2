@@ -1,9 +1,10 @@
-import { LoginForm } from "./form";
+import { LoginForm } from "./form"
 
 export default function Login() {
   return (
     <main>
-      <LoginForm />
+      <h1>Login page</h1>
+      <LoginForm/>
     </main>
-  );
+  )
 }

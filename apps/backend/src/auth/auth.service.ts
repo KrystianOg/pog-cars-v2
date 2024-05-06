@@ -35,9 +35,19 @@ export class AuthService {
     if (!user || bcrypt.compareSync(user.email, user.password)) {
       throw new UnauthorizedException();
     }
-    const payload = { username: user.username, sub: user.id };
+
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: this.jwtService.sign(
+        {
+          username: user.username,
+          sub: user.id,
+        },
+        {
+          secret: process.env.JWT_SECRET,
+          expiresIn: '60d',
+          algorithm: 'HS512',
+        },
+      ),
     };
   }
 

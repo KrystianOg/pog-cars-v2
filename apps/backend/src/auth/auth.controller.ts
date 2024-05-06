@@ -7,6 +7,7 @@ import {
   Post,
   Request,
   Sse,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './auth.guard';
@@ -31,7 +32,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  signIn(@Body() signIn: SignIn) {
+  signIn(@Body() signIn: SignIn, @Req() request: Request) {
     return this.authService.signIn(signIn);
   }
 

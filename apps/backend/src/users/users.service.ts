@@ -54,7 +54,8 @@ export class UsersService {
       return res.rows[0];
     } catch (error) {
       if (error instanceof DatabaseError) {
-        if (error.constraint === 'unique email')
+        console.log('err',error)
+        if (error.constraint === 'users_email_key')
           throw new HttpException(
             'User already exists',
             HttpStatus.BAD_REQUEST,
