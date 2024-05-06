@@ -13,6 +13,7 @@ import { RolesModule } from './roles/roles.module';
 import { DbModule } from './db/db.module';
 import { RentalsModule } from './rentals/rentals.module';
 import { envSchema } from './env.schema';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { envSchema } from './env.schema';
     UsersModule,
     AuthModule,
     RolesModule,
+    EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
       validate: (config) => {
         const res = envSchema.parse(config);

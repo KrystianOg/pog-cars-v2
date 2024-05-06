@@ -5,10 +5,10 @@ const _fetch = (subpath: string, init?: Parameters<typeof fetch>[1]) =>
 }
 
 type params = Parameters<typeof _fetch>
-type PostParams<T> = [params[0], Omit<params[1], "body"> & { body: T}]
+type PostParams<T> = [params[0], Omit<params[1], "body"> & { body: T} | undefined]
 
 export const post = <T>(...params: PostParams<T>) => {
-  const body = JSON.stringify(params[1].body)
+  const body = params[1]?.body ? JSON.stringify(params[1].body) : undefined
 
   return _fetch(params[0], {
     method: "POST",
