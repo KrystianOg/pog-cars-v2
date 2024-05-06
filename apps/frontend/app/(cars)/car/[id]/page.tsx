@@ -1,20 +1,15 @@
 interface CarParams {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
-export default function Car({params}: CarParams) {
-  
-  const carId = parseInt(params.id)
+export default function Car({ params }: CarParams) {
+  const carId = parseInt(params.id);
 
   if (isNaN(carId)) {
-    throw new Error(`Not a valid id.`)
+    throw new Error(`Not a valid id.`);
   }
 
-  return (
-    <main>
-      Something about car {carId}
-    </main>
-  )
+  return <main>Something about car {carId}</main>;
 }

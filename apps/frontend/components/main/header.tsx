@@ -1,9 +1,9 @@
-import { ThemeToggle } from "../theme-toggle"
+import { ThemeToggle } from "../theme-toggle";
 
 export function Header() {
   return (
     <header>
-      <ThemeToggle/>
+      <ThemeToggle />
     </header>
-  )
+  );
 }

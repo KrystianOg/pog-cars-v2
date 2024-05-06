@@ -6,7 +6,7 @@ type EventListeners = Record<string, (event: MessageEvent<any>) => any>;
 export const useSSE = (subpath: string, eventListeners: EventListeners) => {
   useEffect(() => {
     const eventSource = new EventSource(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/${subpath}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/${subpath}`,
     );
 
     for (const key in eventListeners) {

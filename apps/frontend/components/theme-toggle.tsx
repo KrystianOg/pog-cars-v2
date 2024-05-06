@@ -1,7 +1,7 @@
-'use client'
-import {Button} from '@/components/ui/button'
+"use client";
+import { Button } from "@/components/ui/button";
 
-type Theme = "light" | "dark" | "system"
+type Theme = "light" | "dark" | "system";
 
 export function ThemeToggle() {
   /**
@@ -9,7 +9,7 @@ export function ThemeToggle() {
    */
   const setTheme = (theme: Theme) => {
     // TODO: set global context and persist state in local storage
-  }
+  };
 
   return (
     <div>
@@ -26,5 +26,5 @@ export function ThemeToggle() {
         </li>
       </ul>
     </div>
-  )
+  );
 }

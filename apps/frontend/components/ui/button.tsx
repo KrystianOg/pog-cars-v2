@@ -1,9 +1,14 @@
-import styles from './button.module.css'
+import styles from "./button.module.css";
 
 interface ButtonProps extends React.ComponentProps<"button"> {
-  variant?: "light" 
+  variant?: "light";
 }
 
 export function Button(props: ButtonProps) {
-  return <button className={[styles.button, styles.destructive].join(' ')} {...props}/>
+  return (
+    <button
+      className={[styles.button, styles.destructive].join(" ")}
+      {...props}
+    />
+  );
 }
