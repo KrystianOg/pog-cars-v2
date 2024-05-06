@@ -1,7 +1,8 @@
 import { Reflector } from '@nestjs/core';
+import type { Permission } from 'src/types/db';
 
-type Table = 'agency' | 'car' | 'user';
-type Action = 'create' | 'view' | 'update' | 'delete';
-export type Role = `${Action}_${Table}` | 'view_self';
+export const Permissions = Reflector.createDecorator<
+  Permission | Permission[]
+>();
 
-export const Roles = Reflector.createDecorator<Role | Role[]>();
+export type { Permission };

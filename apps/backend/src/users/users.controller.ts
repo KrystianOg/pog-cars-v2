@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { Roles } from '../roles/roles.decorator';
+import { Permissions } from '../roles/roles.decorator';
 import { UserUpdate } from './users.schema';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -9,17 +9,16 @@ import { ApiTags } from '@nestjs/swagger';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  // view self
-  // view others
   // invite others to agency
 
-  @Roles('view_self')
+  // TODO: check if user is self
   @Get()
   findSelf() {
     return this.usersService.findSelf();
   }
 
-  @Roles('view_user')
+  // TODO: check if user is self or has permission
+  @Permissions('view_all_users')
   @Get(':id')
   findOne(@Param('id') id: number) {
     // TODO: change this to also allow find by id
@@ -27,7 +26,7 @@ export class UsersController {
   }
 
   // TODO: change the UserUpdate type
-  @Roles('update_user')
+  @Permissions('modify_all_users') // TODO: or is self
   @Patch(':id')
   update(@Param('id') id: number, @Body() user: UserUpdate) {
     user.id = id;

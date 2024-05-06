@@ -1,29 +1,30 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Roles, type Role } from './roles.decorator';
+import { Permissions, type Permission } from './roles.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    let roles = this.reflector.get(Roles, context.getHandler());
+    let permissions = this.reflector.get(Permissions, context.getHandler());
 
-    if (!Array.isArray(roles)) {
-      roles = [roles];
+    if (!Array.isArray(permissions)) {
+      permissions = [permissions];
     }
 
-    if (!roles) {
+    if (!permissions) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    return this.matchRoles(roles, user);
+    return this.matchPermissions(permissions, user);
   }
 
-  private matchRoles(roles: Role[], userId: number): boolean {
+  // elsint-disable-next-line
+  private matchPermissions(roles: Permission[], userId: number): boolean {
     return true;
   }
 }

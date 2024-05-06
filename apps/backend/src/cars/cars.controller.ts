@@ -10,7 +10,7 @@ import {
 import { CarsService } from './cars.service';
 import { Car, CarCreate, CarUpdate } from './cars.schema';
 
-import { Roles } from '../roles/roles.decorator';
+import { Permissions } from '../roles/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Cars')
@@ -18,38 +18,38 @@ import { ApiTags } from '@nestjs/swagger';
 export class CarsController {
   constructor(private carsService: CarsService) {}
 
-  @Roles('view_car')
+  @Permissions('view_cars')
   @Get()
   findAll(): Promise<Car[]> {
     return this.carsService.findAll();
   }
 
-  @Roles('view_car')
+  @Permissions('view_cars')
   @Get(':id')
   findOne(@Param('id') id: number): Promise<Car> {
     return this.carsService.findOne(id);
   }
 
-  @Roles('create_car')
+  @Permissions('manage_cars')
   @Post()
   create(car: CarCreate): Promise<Car> {
     return this.carsService.create(car);
   }
 
-  @Roles('update_car')
+  @Permissions('manage_cars')
   @Patch(':id')
   update(@Param('id') id: number, @Body() car: CarUpdate): Promise<Car> {
     car.id = id;
     return this.carsService.update(car);
   }
 
-  @Roles('delete_car')
+  @Permissions('manage_cars')
   @Delete(':id')
   softDelete(id: number): Promise<void> {
     return this.carsService.softDelete(id);
   }
 
-  @Roles('delete_car')
+  @Permissions('manage_cars')
   @Delete(':id/hard')
   hardDelete(id: number): Promise<void> {
     return this.carsService.hardDelete(id);
