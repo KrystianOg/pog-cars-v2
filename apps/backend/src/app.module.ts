@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
 import { DbModule } from './db/db.module';
 import { RentalsModule } from './rentals/rentals.module';
+import { envSchema } from './env.schema';
 
 @Module({
   imports: [
@@ -21,10 +22,16 @@ import { RentalsModule } from './rentals/rentals.module';
     AuthModule,
     RolesModule,
     ConfigModule.forRoot({
+      validate: (config) => {
+        const res = envSchema.parse(config);
+        console.info('config validation finished OK');
+        return res;
+      },
       envFilePath: [
         `.env.${process.env.NODE_ENV || 'development'}.local`,
         `.env.${process.env.NODE_ENV || 'development'}`,
       ],
+      expandVariables: true,
     }),
     DbModule,
     RentalsModule,
