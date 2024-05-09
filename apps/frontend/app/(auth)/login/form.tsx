@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { post } from "@/lib/fetch";
+import styles from "./form.module.css";
+import { Button } from "@/components/ui/button";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -42,7 +44,7 @@ export function LoginForm(props: LoginFormProps) {
     }
   });
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className={styles["login-form"]}>
       <Input id="email" placeholder="Email" {...register("email")} required />
       <Input
         id="password"
@@ -52,7 +54,7 @@ export function LoginForm(props: LoginFormProps) {
         required
       />
       {errors.root && <span>This field is smth {errors.root?.message}</span>}
-      <Input type="submit" />
+      <Button type="submit">Submit</Button>
     </form>
   );
 }

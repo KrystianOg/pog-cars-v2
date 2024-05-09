@@ -74,4 +74,4 @@ Nest is [MIT licensed](LICENSE)
 
 ## About
 
-Why not use ORM? Remove unnecessary abstraction, better query optimization, 
+Why not use ORM? Remove unnecessary abstraction, better query optimization,

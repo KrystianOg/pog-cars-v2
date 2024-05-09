@@ -1,13 +1,13 @@
 .button {
   border-width: 0;
+  cursor: pointer;
+  border-radius: var(--radius);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0.5rem 1rem;
   background-color: var(--primary);
   color: var(--primary-foreground);
-}
-
-.button:hover {
-}
-
-.light {
 }
 
 .destructive {

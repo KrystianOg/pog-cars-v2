@@ -1,0 +1,20 @@
+{
+  "name": "transactional",
+  "version": "0.1.0",
+  "description": "Email builder",
+  "scripts": {
+    "dev": "email dev"
+  },
+  "keywords": [],
+  "author": "Krystian Ogonowski",
+  "license": "MIT",
+  "dependencies": {
+    "@react-email/components": "0.0.17",
+    "react": "^18.3.1",
+    "react-email": "2.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8",
+    "@types/react": "^18.3.1"
+  }
+}

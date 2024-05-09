@@ -1,13 +1,15 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { post } from "@/lib/fetch";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSSE } from "@/hooks/useSSE";
 
 export default function VerifyEmail() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const key = searchParams.get("k");
 
-  useSSE("auth/sse", {
+  useSSE(`auth/sse?k=${key}`, {
     "verify-email": () => {
       router.push("/login");
     },

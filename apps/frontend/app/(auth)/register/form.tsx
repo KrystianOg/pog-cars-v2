@@ -34,7 +34,7 @@ export function RegisterForm(props: RegisterFormProps) {
       });
 
       if (res.status === 201) {
-        replace("/");
+        replace(`/verify?k=${res.body}`);
       }
     } catch (e) {
       console.error(e);

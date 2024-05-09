@@ -2,14 +2,9 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import styles from './car-form.module.css'
 
 const carFormSchema = z.object({
   id: z.number().optional(), // defines if entry already exists
@@ -19,7 +14,7 @@ const carFormSchema = z.object({
   drivetrain: z.enum(["FWD", "RWD", "4WD", "AWD"]),
   price: z.number().min(0),
   year: z.number().min(0),
-  mode: z.string().max(64),
+  model: z.string().max(64),
   make: z.string().max(64),
 });
 
@@ -28,12 +23,12 @@ interface CarFormProps {
 }
 
 export function CarForm({ defaultValues }: CarFormProps) {
-  const form = useForm<z.infer<typeof carFormSchema>>({
+  const { register, handleSubmit } = useForm<z.infer<typeof carFormSchema>>({
     resolver: zodResolver(carFormSchema),
     defaultValues,
   });
 
-  const handleSubmit = form.handleSubmit((values) => {
+  const onSubmit = handleSubmit((values) => {
     console.log("car form values", values);
 
     if (values.id) {
@@ -42,26 +37,26 @@ export function CarForm({ defaultValues }: CarFormProps) {
       // TODO create db entry
     }
   });
+
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit}>
-        <FormField
-          control={form.control}
-          name="year"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Year</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder={new Date().getFullYear().toString()}
-                  {...field}
-                />
-              </FormControl>
-            </FormItem>
-          )}
+      <form onSubmit={onSubmit} className={styles.form}>
+        <Input id="mileage" placeholder="Mileage" {...register("mileage")} />
+        <Input
+          id="horsepower"
+          placeholder="Horsepower"
+          {...register("horsepower")}
         />
+        <Input id="seats" placeholder="Seats" {...register("seats")} />
+        <Input
+          id="drivetrain"
+          placeholder="Drivetrain"
+          {...register("drivetrain")}
+        />
+        <Input id="price" placeholder="Price" {...register("price")} />
+        <Input id="year" placeholder="Production year" {...register("year")} />
+        <Input id="model" placeholder="Model" {...register("model")} />
+        <Input id="make" placeholder="Make" {...register("make")} />
+        <Button type="submit">Submit</Button>
       </form>
-    </Form>
   );
 }

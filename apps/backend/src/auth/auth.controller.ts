@@ -5,15 +5,17 @@ import {
   HttpStatus,
   Get,
   Post,
-  Request,
   Sse,
   Req,
+  Res,
+  Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { Observable, fromEvent, map } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Request, Response } from 'express';
 
 type SignIn = {
   email: string;
@@ -21,51 +23,66 @@ type SignIn = {
 };
 
 enum EventName {
-  VERIFY_EMAIL= 'verify-email'
+  VERIFY_EMAIL = 'verify-email',
 }
+
+const targetClient = (eventName: EventName, key: string) =>
+  `${eventName}:${key}`;
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService, private eventEmitter: EventEmitter2) {}
+  constructor(
+    private authService: AuthService,
+    private eventEmitter: EventEmitter2,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  signIn(@Body() signIn: SignIn, @Req() request: Request) {
-    return this.authService.signIn(signIn);
+  async signIn(
+    @Body() signIn: SignIn,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const credentials = await this.authService.signIn(signIn);
+
+    response.cookie('refresh_token', credentials.refresh_token, {
+      httpOnly: true,
+    });
+
+    return {
+      access_token: credentials.access_token,
+    };
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Public()
   @Post('register')
-  signUp(@Body() signUp: SignIn) {
-    return this.authService.signUp(signUp.email, signUp.password);
+  async signUp(@Body() signUp: SignIn): Promise<string> {
+    const res = await this.authService.signUp(signUp.email, signUp.password);
+    return res.watch_uuid;
   }
 
-  @Get('profile')
-  getProfile(@Request() req: unknown) {
-    // FIXME: type of request here
-    // @ts-expect-error req is unknown for now will change it later
-    return req.user;
-  }
-
+  /**
+   * @param key is watch_uuid returned by signUp
+   */
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('emit')
-  verifyEmail() {
-    this.eventEmitter.emit(EventName.VERIFY_EMAIL, {id: 1})
+  verifyEmail(@Query('k') key: string) {
+    this.eventEmitter.emit(targetClient(EventName.VERIFY_EMAIL, key), { key });
   }
 
+  /**
+   * This method is used to automatically respond to user accepting email invitation
+   * @param key is watch_uuid returned by signUp
+   */
   @Public()
   @Sse('sse')
-  sse(): Observable<MessageEvent> {
-    return fromEvent(this.eventEmitter, EventName.VERIFY_EMAIL).pipe(
-      map((data) => {const event = new MessageEvent(EventName.VERIFY_EMAIL, {data: JSON.stringify({success: true})}) 
-      console.log('data', data)
-        console.log('event', event)
-        return event
-      })
-    )
+  sse(@Query('k') key: string): Observable<MessageEvent> {
+    return fromEvent(
+      this.eventEmitter,
+      targetClient(EventName.VERIFY_EMAIL, key),
+    ).pipe(map((data) => new MessageEvent(EventName.VERIFY_EMAIL, { data })));
   }
 }

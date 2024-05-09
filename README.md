@@ -16,4 +16,24 @@ That was at first and then I just crate multiple migration .sql files in order f
 
 ## The v1 features
 
-- [ ] delete
+### Agency
+
+- [ ] can configure some website branding 
+
+### Cars
+
+- [ ] search for vehicles by type (car, van, truck, premium), price, seats , transmission (automatic, manual, any), fuel (ON, PB, hybrid, electric), boot space, AC
+
+- [ ] Base user can rent a car
+
+- [ ] 
+
+### User
+
+#### Anonymous
+
+#### Base user
+
+#### Employee
+
+

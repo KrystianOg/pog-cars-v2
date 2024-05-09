@@ -1,65 +1,64 @@
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  --background: rgba(255, 255, 255, 1);
+  --foreground: rgba(224, 224, 224, 1);
 
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
+  --card: rgba(255, 255, 255, 1);
+  --card-foreground: rgba(224, 224, 224, 1);
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
+  --popover: rgba(255, 255, 255, 1);
+  --popover-foreground: rgba(224, 224, 224, 1);
 
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
+  --primary: #2563eb;
+  --primary-foreground: #fff;
 
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
+  --secondary: rgba(225, 230, 232, 1);
+  --secondary-foreground: rgba(224, 182, 161, 1);
 
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
+  --muted: rgba(225, 230, 232, 1);
+  --muted-foreground: rgba(217, 186, 212, 1);
 
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --accent: rgba(225, 230, 232, 1);
+  --accent-foreground: rgba(224, 182, 161, 1);
 
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: #ef4444;
+  --destructive-foreground: #fff;
 
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
+  --border: rgba(218, 201, 219, 1);
+  --input: #dbdac9;
+  --ring: rgba(255, 255, 255, 1);
 
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
+  --background: rgba(224, 224, 224, 1);
+  --foreground: rgba(225, 230, 232, 1);
 
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
+  --card: rgba(224, 224, 224, 1);
+  --card-foreground: rgba(225, 230, 232, 1);
 
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
+  --popover: rgba(224, 224, 224, 1);
+  --popover-foreground: rgba(225, 230, 232, 1);
 
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
+  --primary: rgba(225, 230, 232, 1);
+  --primary-foreground: rgba(224, 182, 161, 1);
 
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
+  --secondary: rgba(226, 215, 202, 1);
+  --secondary-foreground: rgba(225, 230, 232, 1);
 
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
+  --muted: rgba(226, 215, 202, 1);
+  --muted-foreground: rgba(225, 213, 217, 1);
 
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
+  --accent: rgba(226, 215, 202, 1);
+  --accent-foreground: rgba(225, 230, 232, 1);
 
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: rgba(255, 124, 77, 1);
+  --destructive-foreground: rgba(225, 230, 232, 1);
 
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
+  --border: rgba(226, 215, 202, 1);
+  --input: rgba(226, 215, 202, 1);
+  --ring: rgba(226, 218, 224, 1);
 }
-
 /*
   1. Use a more-intuitive box-sizing model.
 */

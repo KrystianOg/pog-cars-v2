@@ -51,10 +51,10 @@ export class UsersService {
         text: 'INSERT INTO users (email, password, username) VALUES ($1, $2, $3) RETURNING *;',
         values: [user.email, passwordHash, user.username],
       });
+
       return res.rows[0];
     } catch (error) {
       if (error instanceof DatabaseError) {
-        console.log('err',error)
         if (error.constraint === 'users_email_key')
           throw new HttpException(
             'User already exists',

@@ -72,7 +72,7 @@ export class CarsService {
         car.make,
         car.id,
       ],
-    });
+    }); 
 
     return res.rows[0];
   }
