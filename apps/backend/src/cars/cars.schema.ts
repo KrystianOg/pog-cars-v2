@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const carSchema = z.object({
+export const carSchema = z.object({
   id: z.number().min(0),
   mileage: z.number().min(0),
   horsepower: z.number().min(0),
@@ -22,6 +22,6 @@ export type CarCreate = z.infer<typeof carCreateSchema>;
 
 export const carUpdateSchema = carCreateSchema.partial().extend({
   id: z.number().min(0),
-});
+}); 
 
 export type CarUpdate = z.infer<typeof carUpdateSchema>;

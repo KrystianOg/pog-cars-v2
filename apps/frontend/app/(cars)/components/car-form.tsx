@@ -6,17 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import styles from './car-form.module.css'
 
-const carFormSchema = z.object({
-  id: z.number().optional(), // defines if entry already exists
-  mileage: z.number().min(0),
-  horsepower: z.number().min(0),
-  seats: z.number().min(0),
-  drivetrain: z.enum(["FWD", "RWD", "4WD", "AWD"]),
-  price: z.number().min(0),
-  year: z.number().min(0),
-  model: z.string().max(64),
-  make: z.string().max(64),
-});
+import {carSchema as carFormSchema} from '../../../../backend/src/cars/cars.schema'
 
 interface CarFormProps {
   defaultValues?: z.infer<typeof carFormSchema>;
