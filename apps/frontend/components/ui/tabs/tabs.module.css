@@ -1,0 +1,28 @@
+
+.tabs__list {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  width: fit-content;
+
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+
+  list-style-type: none;
+}
+
+.tab__content {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--muted);
+}
+
+.tab__content--active {
+
+}
+
+.tab--active {
+
+}
