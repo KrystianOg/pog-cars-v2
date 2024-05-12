@@ -1,13 +1,11 @@
 .avatar {
-  --size: 4rem;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  width: var(--size);
-  height: var(--size);
   border-radius: 50%;
+  height: 100%;
+  aspect-ratio: 1/1;
   overflow: hidden;
   background-color: var(--primary);
   color: var(--primary-foreground);
