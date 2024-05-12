@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { Agency, AgencyCreate, AgencyUpdate } from './agencies.schema';
+import type { Agency, CreateAgencyDto } from './agencies.schema';
 import { PG_CONNECTION } from 'src/db/db.module';
 import { Pool } from 'pg';
 
@@ -7,7 +7,7 @@ import { Pool } from 'pg';
 export class AgenciesService {
   constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
 
-  async create(agency: AgencyCreate): Promise<Agency> {
+  async create(agency: CreateAgencyDto): Promise<Agency> {
     const address = agency.address;
     const res = await this.conn.query<Agency>({
       text: `WITH inserted_address AS (
@@ -47,11 +47,11 @@ export class AgenciesService {
     return res.rows[0];
   }
 
-  async update(agency: AgencyUpdate): Promise<Agency> {
+  async update(id: number, agency: CreateAgencyDto): Promise<Agency> {
     const res = await this.conn.query<Agency>({
       text: `UPDATE agencies 
-          name = COALESCE($1, name)`,
-      values: [agency.name],
+          name = COALESCE($2, name) WHERE id = $1`,
+      values: [id, agency.name],
     });
 
     return res.rows[0];

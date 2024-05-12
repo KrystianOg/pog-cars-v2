@@ -1,6 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import type { Car, CarCreate, CarUpdate } from './cars.schema';
-import { carCreateSchema, carUpdateSchema } from './cars.schema';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import type { Car, CreateCarDto } from './cars.schema';
 import { PG_CONNECTION } from 'src/db/db.module';
 import { Pool } from 'pg';
 
@@ -8,9 +7,7 @@ import { Pool } from 'pg';
 export class CarsService {
   constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
 
-  async create(car: CarCreate): Promise<Car> {
-    car = carCreateSchema.parse(car);
-
+  async create(car: CreateCarDto): Promise<Car> {
     const res = await this.conn.query<Car>({
       text: 'INSERT INTO cars (mileage, horsepower, seats, drivetrain, price, year, model, make) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
       values: [
@@ -44,12 +41,15 @@ export class CarsService {
 
     // TODO: what if result was not found ??
 
+    const row = res.rows[0];
+
+    if (!row) {
+      throw new NotFoundException();
+    }
     return res.rows[0];
   }
 
-  async update(car: CarUpdate): Promise<Car> {
-    car = carUpdateSchema.parse(car);
-
+  async update(id: number, car: CreateCarDto): Promise<Car> {
     const res = await this.conn.query<Car>({
       text: `UPDATE cars SET 
         mileage = COALESCE($1, mileage), 
@@ -70,9 +70,9 @@ export class CarsService {
         car.year,
         car.model,
         car.make,
-        car.id,
+        id
       ],
-    }); 
+    });
 
     return res.rows[0];
   }

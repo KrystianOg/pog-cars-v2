@@ -20,11 +20,7 @@ export const addressCreateSchema = addressSchema.omit({
   id: true,
 });
 
-export type AddressCreateSchema = z.infer<typeof addressCreateSchema>;
-
-export const addressUpdateSchema = addressCreateSchema.partial().extend({
-  id: addressSchema.shape.id,
-});
+export type CreateAddressDto = z.infer<typeof addressCreateSchema>;
 
 // agency schema related
 const agencySchema = z.object({
@@ -39,10 +35,5 @@ export const agencyCreateSchema = agencySchema.omit({
   id: true,
 });
 
-export type AgencyCreate = z.infer<typeof agencyCreateSchema>;
+export type CreateAgencyDto = z.infer<typeof agencyCreateSchema>;
 
-export const agencyUpdateSchema = agencySchema.partial().extend({
-  id: agencySchema.shape.id,
-});
-
-export type AgencyUpdate = z.infer<typeof agencyUpdateSchema>;
