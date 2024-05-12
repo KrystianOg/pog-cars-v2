@@ -18,7 +18,7 @@ That was at first and then I just crate multiple migration .sql files in order f
 
 ### Agency
 
-- [ ] can configure some website branding 
+- [ ] can configure some website branding
 
 ### Cars
 
@@ -26,7 +26,7 @@ That was at first and then I just crate multiple migration .sql files in order f
 
 - [ ] Base user can rent a car
 
-- [ ] 
+- [ ]
 
 ### User
 
@@ -35,5 +35,3 @@ That was at first and then I just crate multiple migration .sql files in order f
 #### Base user
 
 #### Employee
-
-

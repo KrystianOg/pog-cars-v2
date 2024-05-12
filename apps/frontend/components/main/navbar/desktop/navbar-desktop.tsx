@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import styles from "./navbar-desktop.module.css";
 import Link from "next/link";
 import { classnames } from "@/utils/classnames";
