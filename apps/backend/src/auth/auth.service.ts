@@ -4,7 +4,8 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/users.schema';
 import { PG_CONNECTION } from 'src/db/db.module';
-import { Pool, PoolClient } from 'pg';
+import { Pool } from 'pg';
+import { transaction } from 'src/db/utils/transaction';
 
 type SignInProps =
   | {
@@ -40,25 +41,24 @@ export class AuthService {
     if (!user || bcrypt.compareSync(user.email, user.password)) {
       throw new UnauthorizedException();
     }
-
-    function getToken(expiresIn: string, user: User, jwtService: JwtService) {
-      return jwtService.sign(
-        {
-          username: user.username,
-          sub: user.id,
-        },
-        {
-          secret: process.env.JWT_SECRET,
-          expiresIn,
-          algorithm: 'HS512',
-        },
-      );
-    }
-
     return {
-      access_token: getToken('5m', user, this.jwtService),
-      refresh_token: getToken('60d', user, this.jwtService),
+      access_token: this.getToken('5m', user, this.jwtService),
+      refresh_token: this.getToken('60d', user, this.jwtService),
     };
+  }
+
+  private getToken(expiresIn: string, user: User, jwtService: JwtService) {
+    return jwtService.sign(
+      {
+        username: user.username,
+        sub: user.id,
+      },
+      {
+        secret: process.env.JWT_SECRET,
+        expiresIn,
+        algorithm: 'HS512',
+      },
+    );
   }
 
   async signUp(
@@ -82,23 +82,23 @@ export class AuthService {
       return res.rows[0];
     });
   }
-}
 
-const transaction = async <T>(
-  pool: Pool,
-  cb: (client: PoolClient) => T | Promise<T>,
-): Promise<NoInfer<T>> => {
-  let client = await pool.connect();
+  async refreshtoken(refresh_token: string): Promise<{ access_token: string }> {
+    try {
+      const { sub: userId } = this.jwtService.verify<{ sub: string }>(
+        refresh_token,
+        { secret: process.env.JWT_SECRET },
+      );
 
-  try {
-    await client.query('BEGIN');
-    const res = await cb(client);
-    await client.query('COMMIT');
-    return res;
-  } catch (e) {
-    await client.query('ROLLBACK');
-    throw e;
-  } finally {
-    client.release();
+      const user = await this.usersService.findOneById(parseInt(userId));
+
+      const token = this.getToken('5m', user, this.jwtService);
+
+      return {
+        access_token: token,
+      };
+    } catch {
+      throw new UnauthorizedException();
+    }
   }
-};
+}

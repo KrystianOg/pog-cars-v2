@@ -46,13 +46,11 @@ export class AuthController {
   ) {
     const credentials = await this.authService.signIn(signIn);
 
-    response.cookie('refresh_token', credentials.refresh_token, {
+    response.cookie('refresh_token', 'Bearer ' + credentials.refresh_token, {
       httpOnly: true,
     });
 
-    return {
-      access_token: credentials.access_token,
-    };
+    response.cookie('access_token', 'Bearer ' + credentials.access_token );
   }
 
   @HttpCode(HttpStatus.CREATED)
@@ -61,6 +59,20 @@ export class AuthController {
   async signUp(@Body() signUp: SignIn): Promise<string> {
     const res = await this.authService.signUp(signUp.email, signUp.password);
     return res.watch_uuid;
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Public()
+  @Get('refresh-token')
+  async refreshToken(
+    @Req() req: Request,
+    @Res({passthrough: true}) response: Response
+  ): Promise<void> {
+   const refresh_token = req.cookies.refresh_token
+
+    const {access_token} = await this.authService.refreshtoken(refresh_token)
+
+    response.cookie('access_token', 'Bearer ' + access_token)
   }
 
   /**
