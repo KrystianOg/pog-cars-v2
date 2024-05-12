@@ -3,7 +3,7 @@ import { Icon } from "./icon";
 
 const meta = {
   component: Icon,
-  title: "Icon",
+  title: "UI/Icon",
   tags: ["autodocs"],
 } satisfies Meta<typeof Icon>;
 

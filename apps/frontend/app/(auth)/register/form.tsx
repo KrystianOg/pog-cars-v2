@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { post } from "@/lib/fetch";
+import { Button } from "@/components/ui/button";
 
 const registerFormSchema = z.object({
   email: z.string().email(),
@@ -33,7 +34,7 @@ export function RegisterForm(props: RegisterFormProps) {
         body: data,
       });
 
-      if (res.status === 201) {
+      if (res?.status === 201) {
         replace(`/verify?k=${res.body}`);
       }
     } catch (e) {
@@ -51,7 +52,7 @@ export function RegisterForm(props: RegisterFormProps) {
         required
       />
       {errors.root && <span>This field is smth {errors.root?.message}</span>}
-      <Input type="submit" />
+      <Button type="submit">Register</Button>
     </form>
   );
 }

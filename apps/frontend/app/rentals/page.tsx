@@ -1,4 +1,4 @@
-import { RentDialog } from "../components/rent-dialog";
+import { RentDialog } from "./components/rent-dialog";
 
 const rentalsMock = [
   {

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "@/styles/globals.css";
+import styles from '@/styles/global-layout.module.css'
 import { Header } from "@/components/main/header";
 import { NavbarDesktop } from "@/components/main/navbar/desktop";
+import { classnames } from "@/utils/classnames";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,9 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={classnames(inter.className, styles['global-layout'])}>
+        <NavbarDesktop className={styles['row-span-2']}/>
         <Header />
-        <NavbarDesktop />
         {children}
       </body>
     </html>

@@ -1,0 +1,9 @@
+.global-layout {
+  display: grid;
+  grid-template-columns: min-content auto;
+  grid-template-rows: min-content auto;
+}
+
+.row-span-2 {
+  grid-row: 1 / 3;
+}

@@ -7,15 +7,15 @@
 
   --popover: rgba(255, 255, 255, 1);
   --popover-foreground: rgba(224, 224, 224, 1);
-
-  --primary: #2563eb;
+  /* from 'cyan' palette */
+  --primary: #06b6d4; /* cyan-500 */
   --primary-foreground: #fff;
 
   --secondary: rgba(225, 230, 232, 1);
   --secondary-foreground: rgba(224, 182, 161, 1);
 
-  --muted: rgba(225, 230, 232, 1);
-  --muted-foreground: rgba(217, 186, 212, 1);
+  --muted: #ecfeff;
+  --muted-foreground: #083344;
 
   --accent: rgba(225, 230, 232, 1);
   --accent-foreground: rgba(224, 182, 161, 1);
@@ -79,6 +79,8 @@
   4. Improve text rendering
 */
 body {
+  overflow-x: hidden;
+  min-height: 100svh;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
