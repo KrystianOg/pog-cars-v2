@@ -1,0 +1,16 @@
+.feature-discovery {
+  position: absolute;
+  min-width: 100svw;
+  min-height: 100svh;
+  top: 0;
+  left: 0;
+}
+
+.content-container {
+  width: fit-content;
+  height: fit-content;
+  z-index:1;
+  position:relative;
+  border: solid 400px red;
+  border-radius: 1rem;
+}
