@@ -45,6 +45,7 @@ export const NavbarDesktop = ({ className, ...props }: NavbarDesktop) => {
   // TODO: get agency id from jwt or global context
   const agencyId = 1;
 
+  console.log('classname', className)
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useLocalStorage<boolean>(
     COLLAPSED_KEY,
@@ -72,34 +73,34 @@ export const NavbarDesktop = ({ className, ...props }: NavbarDesktop) => {
             href="/cars"
             text="Cars"
             iconKind="map"
-            active={!pathname}
+            active={!!pathname}
           />
           {/* NOTE: must be in agency and logged in*/}
           <NavbarDesktopItem
             href={`/agency/${agencyId}`}
             text="Agency"
             iconKind="building-office"
-            active={!!pathname}
+            active={!pathname}
           />
           {/* NOTE: like previous & must have view_users permission*/}
           <NavbarDesktopItem
             href={`/agency/${agencyId}/users`}
             text="Members"
             iconKind="users"
-            active={!!pathname}
+            active={!pathname}
           />
           {/* NOTE: must have view_earnings permission */}
           <NavbarDesktopItem
             href="/earnings"
             text="Earnings"
-            iconKind="qr-code"
-            active={!!pathname}
+            iconKind="share"
+            active={!pathname}
           />
           <NavbarDesktopItem
             href="/settings"
             text="Settings"
             iconKind="cog-6-tooth"
-            active={!!pathname}
+            active={!pathname}
           />
         </ul>
       </nav>
