@@ -79,7 +79,8 @@ create table users_roles (
   agency_id int not null references agencies(id) on delete cascade,
   role_name text not null,
   foreign key (agency_id, role_name) references roles(agency_id, name) on delete cascade,
-  expiration timestamp with time zone
+  expiration timestamp with time zone,
+  constraint no_duplicate_role unique (user_id, agency_id, role_name)
 );
 
 CREATE TRIGGER update_users_roles_updated_at BEFORE UPDATE ON users_roles FOR EACH ROW EXECUTE PROCEDURE update_updated_column();
@@ -94,8 +95,10 @@ create table users_permissions (
   created_by int references users(id) on delete set null,
   --
   user_id int not null references users(id) on delete cascade,
+  agency_id int not null references agencies(id) on delete cascade,
   permission text not null references permissions(id) on delete cascade,
-  expiration timestamp with time zone
+  expiration timestamp with time zone,
+  constraint no_duplicate_permission unique (user_id, agency_id, permission) 
 );
 
 CREATE TRIGGER update_users_permissions_updated_at BEFORE UPDATE ON users_permissions FOR EACH ROW EXECUTE PROCEDURE update_updated_column();

@@ -9,15 +9,9 @@ const roleSchema = z.object({
 
 export const roleCreateSchema = roleSchema.omit({
   id: true,
-});
+}).extend({
+  permissionIds: z.number().array().min(1)
+})
 
 export type Role = z.infer<typeof roleSchema>;
-export type RoleCreate = z.infer<typeof roleCreateSchema>;
-/**
- * permissions don't have create schema as they are created
- * by migration
- */
-const permissionSchema = z.object({
-  id: z.string(),
-  description: z.string().optional(),
-});
+export type CreateRoleDto = z.infer<typeof roleCreateSchema>;
