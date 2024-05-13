@@ -1,6 +1,6 @@
 .global-layout {
   display: grid;
-  grid-template-columns: min-content auto;
+  grid-template-columns: clamp(8rem, 3rem + 13.333vw, 15rem) auto;
   grid-template-rows: min-content auto;
 }
 
