@@ -12,9 +12,9 @@ async function fetchData(id: string | number): Promise<Car> {
   const res = await get(`cars/${id}`);
 
   if (!res || res.status === 404) {
-    throw new Error()
+    throw new Error();
   }
-  return await res.json()
+  return await res.json();
 }
 
 export default async function Car({ params }: CarParams) {

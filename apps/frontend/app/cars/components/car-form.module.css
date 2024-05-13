@@ -2,8 +2,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
-  width: clamp(18rem, 14rem + 20vw, 32rem);
+  margin-top: 0.5rem;
 }
 
-#price {
-}

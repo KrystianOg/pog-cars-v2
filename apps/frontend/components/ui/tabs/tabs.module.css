@@ -1,4 +1,3 @@
-
 .tabs__list {
   display: flex;
   gap: 1rem;
@@ -20,9 +19,7 @@
 }
 
 .tab__content--active {
-
 }
 
 .tab--active {
-
 }

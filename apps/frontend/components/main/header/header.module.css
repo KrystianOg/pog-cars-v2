@@ -18,9 +18,8 @@
     transition: transform 200ms 200ms;
     transition: display 100ms;
 
-    @media(width >= 768px) {
+    @media (width >= 768px) {
       transform: unset;
     }
   }
 }
-

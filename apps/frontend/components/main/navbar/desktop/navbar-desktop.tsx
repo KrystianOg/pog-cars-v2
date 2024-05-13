@@ -32,8 +32,8 @@ export const NavbarDesktopItem = ({
     )}
     {...props}
   >
-    <Icon kind={iconKind} size="sm" />
     <Link className={styles.link} href={href}>
+      <Icon kind={iconKind} size="sm" />
       {text}
     </Link>
   </li>
@@ -45,7 +45,7 @@ export const NavbarDesktop = ({ className, ...props }: NavbarDesktop) => {
   // TODO: get agency id from jwt or global context
   const agencyId = 1;
 
-  console.log('classname', className)
+  console.log("classname", className);
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useLocalStorage<boolean>(
     COLLAPSED_KEY,

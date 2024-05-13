@@ -1,19 +1,24 @@
 import styles from "./button.module.css";
 import { classnames } from "@/utils/classnames";
+import {Slot, type AsChildProps, isComponent} from '../slot' 
 
-interface ButtonProps extends React.ComponentProps<"button"> {
-  variant?: "destructive";
+export type ButtonProps = AsChildProps<React.ButtonHTMLAttributes<HTMLButtonElement> & {variant?: "destructive"}> &  {
+  style?: React.CSSProperties
+  className?: string
 }
 
-export function Button({ variant, className, ...props }: ButtonProps) {
+export function Button(props: ButtonProps) {
+  const Comp = props.asChild ? Slot : 'button'
+
   return (
-    <button
+    <Comp
       className={classnames(
         styles.button,
-        className,
-        variant && styles[variant],
+        props.className,
+        isComponent(props) && props.variant && styles[props.variant],
       )}
       {...props}
     />
   );
 }
+
