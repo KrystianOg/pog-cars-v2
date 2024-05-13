@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { User, userCreateSchema, userUpdateSchema } from './users.schema';
 import type { UserCreate, UserUpdate } from './users.schema';
 import * as bcrypt from 'bcrypt';
@@ -14,17 +14,7 @@ enum Code {
 export class UsersService {
   constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
 
-  async findSelf(): Promise<User | undefined> {
-    const id = 1;
-    const res = await this.conn.query<User>({
-      text: 'SELECT * FROM users WHERE id = $1',
-      values: [id],
-    });
-
-    return res.rows[0];
-  }
-
-  async findOne(email: string | number): Promise<User | undefined> {
+  async findOne(email: string | number): Promise<User> {
     // TODO: make sure that this | number doesn't break anything
     const res = await this.conn.query<User>({
       text: 'SELECT * FROM users WHERE email = $1;',
@@ -32,6 +22,19 @@ export class UsersService {
     });
 
     return res.rows[0];
+  }
+
+  async findOneById(id: number): Promise<User> {
+    const res = await this.conn.query<User>({
+      text: 'SELECT * FROM users WHERE id = $1;',
+      values: [id]
+    })
+
+    if (res.rows.length === 0) {
+      throw new NotFoundException()
+    }
+
+    return res.rows[0]
   }
 
   async findAll(): Promise<User[]> {

@@ -9,14 +9,6 @@ import { ApiTags } from '@nestjs/swagger';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  // invite others to agency
-
-  // TODO: check if user is self
-  @Get()
-  findSelf() {
-    return this.usersService.findSelf();
-  }
-
   // TODO: check if user is self or has permission
   @Permissions('view_all_users')
   @Get(':id')
