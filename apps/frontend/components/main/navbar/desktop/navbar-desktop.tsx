@@ -45,7 +45,6 @@ export const NavbarDesktop = ({ className, ...props }: NavbarDesktop) => {
   // TODO: get agency id from jwt or global context
   const agencyId = 1;
 
-  console.log("classname", className);
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useLocalStorage<boolean>(
     COLLAPSED_KEY,

@@ -49,10 +49,6 @@ export const FeatureDiscovery = ({
   const [childRef, rectRef, { value, setValue }] =
     useFeatureDiscovery<HTMLDivElement>(discoveryKey);
 
-  useEffect(() => {
-    console.log("new rect", rectRef.current);
-  }, [rectRef]);
-
   const style: CSSProperties | undefined = useMemo(() => {
     const cur = rectRef.current;
 
