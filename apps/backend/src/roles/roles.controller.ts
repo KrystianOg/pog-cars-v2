@@ -21,7 +21,7 @@ import { roleCreateSchema } from './roles.schema';
 export class RolesController {
   constructor(private rolesService: RolesService) {}
 
-  @Permissions('view_role')
+  @Permissions('manage_roles')
   @Get()
   findAll(): Promise<Role[]> {
     return this.rolesService.findAll();
@@ -33,13 +33,13 @@ export class RolesController {
   //   return this.rolesService.findOne(id);
   // }
 
-  @Permissions('create_role')
+  @Permissions('manage_roles')
   @Post()
   create(@Body(new ZodValidationPipe(roleCreateSchema)) role: CreateRoleDto): Promise<Role> {
     return this.rolesService.create(role);
   }
 
-  @Permissions('update_role')
+  @Permissions('manage_roles')
   @Patch(':id')
   update(
     @Param('id', new ParseIntPipe()) id: number,
@@ -48,13 +48,13 @@ export class RolesController {
     return this.rolesService.update(id, role);
   }
 
-  @Permissions('delete_role')
+  @Permissions('manage_roles')
   @Delete(':id')
   softDelete(@Param('id', new ParseIntPipe()) id: number): Promise<void> {
     return this.rolesService.softDelete(id);
   }
 
-  @Permissions('delete_role')
+  @Permissions('manage_roles')
   @Delete(':id/hard')
   hardDelete(@Param('id', new ParseIntPipe()) id: number): Promise<void> {
     return this.rolesService.hardDelete(id);

@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { CarsService } from './cars.service';
 import { Car, carCreateSchema, CreateCarDto } from './cars.schema';
-
 import { Permissions } from '../roles/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { ZodValidationPipe } from 'src/utils/zod/validation.pipe';

@@ -62,6 +62,13 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  async signOut(@Res({passthrough: true}) response: Response) {
+    response.clearCookie('refresh_token')
+    response.clearCookie('access_token')
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Public()
   @Get('refresh-token')
   async refreshToken(
