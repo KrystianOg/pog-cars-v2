@@ -1,7 +1,5 @@
-interface LabelProps extends React.ComponentProps<'label'> {}
+interface LabelProps extends React.ComponentProps<"label"> {}
 
 export const Label = (props: LabelProps) => {
-  return (
-    <label {...props} />
-  )
-}
+  return <label {...props} />;
+};

@@ -1,5 +1,4 @@
 "use client";
-import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -21,9 +20,5 @@ export function RentForm() {
     console.log("rent form values: ", values);
   });
 
-  return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit}></form>
-    </Form>
-  );
+  return <form onSubmit={handleSubmit}></form>;
 }

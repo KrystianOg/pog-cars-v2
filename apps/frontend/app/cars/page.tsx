@@ -4,23 +4,23 @@ import { type Car } from "../../../backend/src/cars/cars.schema";
 import { get } from "@/lib/fetch";
 import Link from "next/link";
 
-export const revalidate = 300
+export const revalidate = 300;
 
 async function fetchData(): Promise<Car[]> {
-  const res = await get('cars');
+  const res = await get("cars");
 
   if (!res || res.status >= 400) {
-    throw new Error()
+    throw new Error();
   }
 
-  const smth = await res.json()
+  const smth = await res.json();
 
-  console.log('smth', smth)
-  return smth
+  console.log("smth", smth);
+  return smth;
 }
 
 export default async function CarsPage() {
-  const cars = await fetchData()
+  const cars = await fetchData();
 
   return (
     <main>
@@ -28,12 +28,14 @@ export default async function CarsPage() {
       <Dialog>
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
-          <CarForm/>
+          <CarForm />
         </DialogContent>
       </Dialog>
       {"Cars: "}
       {cars.map((car) => (
-        <Link href={`/cars/${car.id}`} key={car.id}>{car.make} {car.model}</Link>
+        <Link href={`/cars/${car.id}`} key={car.id}>
+          {car.make} {car.model}
+        </Link>
       ))}
     </main>
   );

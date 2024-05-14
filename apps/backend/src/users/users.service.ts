@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User, userCreateSchema, userUpdateSchema } from './users.schema';
 import type { UserCreate, UserUpdate } from './users.schema';
 import * as bcrypt from 'bcrypt';
@@ -27,14 +33,14 @@ export class UsersService {
   async findOneById(id: number): Promise<User> {
     const res = await this.conn.query<User>({
       text: 'SELECT * FROM users WHERE id = $1;',
-      values: [id]
-    })
+      values: [id],
+    });
 
     if (res.rows.length === 0) {
-      throw new NotFoundException()
+      throw new NotFoundException();
     }
 
-    return res.rows[0]
+    return res.rows[0];
   }
 
   async findAll(): Promise<User[]> {

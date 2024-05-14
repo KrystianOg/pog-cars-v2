@@ -7,11 +7,13 @@ const roleSchema = z.object({
   description: z.string().optional(),
 });
 
-export const roleCreateSchema = roleSchema.omit({
-  id: true,
-}).extend({
-  permissionIds: z.number().array().min(1)
-})
+export const roleCreateSchema = roleSchema
+  .omit({
+    id: true,
+  })
+  .extend({
+    permissionIds: z.number().array().min(1),
+  });
 
 export type Role = z.infer<typeof roleSchema>;
 export type CreateRoleDto = z.infer<typeof roleCreateSchema>;

@@ -34,7 +34,9 @@ export class AgenciesController {
 
   @Permissions('create_agency')
   @Post()
-  create(@Body(new ZodValidationPipe(agencyCreateSchema)) agency: CreateAgencyDto): Promise<Agency> {
+  create(
+    @Body(new ZodValidationPipe(agencyCreateSchema)) agency: CreateAgencyDto,
+  ): Promise<Agency> {
     return this.agenciesService.create(agency);
   }
 

@@ -38,6 +38,6 @@ export function isSlot<T>(
 
 export function isComponent<T>(
   slot: AsChildProps<T>,
-): slot is ({asChild?: false} & T) {
-  return !slot.asChild
+): slot is { asChild?: false } & T {
+  return !slot.asChild;
 }

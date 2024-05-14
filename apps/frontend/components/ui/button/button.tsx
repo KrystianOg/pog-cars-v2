@@ -1,14 +1,16 @@
 import styles from "./button.module.css";
 import { classnames } from "@/utils/classnames";
-import {Slot, type AsChildProps, isComponent} from '../slot' 
+import { Slot, type AsChildProps, isComponent } from "../slot";
 
-export type ButtonProps = AsChildProps<React.ButtonHTMLAttributes<HTMLButtonElement> & {variant?: "destructive"}> &  {
-  style?: React.CSSProperties
-  className?: string
-}
+export type ButtonProps = AsChildProps<
+  React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "destructive" }
+> & {
+  style?: React.CSSProperties;
+  className?: string;
+};
 
 export function Button(props: ButtonProps) {
-  const Comp = props.asChild ? Slot : 'button'
+  const Comp = props.asChild ? Slot : "button";
 
   return (
     <Comp
@@ -21,4 +23,3 @@ export function Button(props: ButtonProps) {
     />
   );
 }
-

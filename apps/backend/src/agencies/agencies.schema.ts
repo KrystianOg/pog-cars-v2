@@ -36,4 +36,3 @@ export const agencyCreateSchema = agencySchema.omit({
 });
 
 export type CreateAgencyDto = z.infer<typeof agencyCreateSchema>;
-

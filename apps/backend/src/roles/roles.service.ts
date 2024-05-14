@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Role, CreateRoleDto} from './roles.schema';
+import { Role, CreateRoleDto } from './roles.schema';
 import { PG_CONNECTION } from 'src/db/db.module';
 import { Pool } from 'pg';
 import { transaction } from 'src/db/utils/transaction';
@@ -10,30 +10,30 @@ export class RolesService {
 
   async findAll(): Promise<Role[]> {
     const res = await this.conn.query<Role>({
-      text: 'SELECT * FROM roles'
-    })
+      text: 'SELECT * FROM roles',
+    });
 
-    return res.rows
+    return res.rows;
   }
 
   /**
    * Roles are created per agency
    */
   async create(role: CreateRoleDto): Promise<Role> {
-    const smth  =transaction(this.conn, async (client) => {
+    const smth = transaction(this.conn, async (client) => {
       const smth1 = await client.query<Role>({
-        text: "INSERT INTO roles (agency_id, name, description, created_by) values ($1, $2, $3, $4) returning *",
+        text: 'INSERT INTO roles (agency_id, name, description, created_by) values ($1, $2, $3, $4) returning *',
         // TODO: change the '1' to current_user.id
-        values: [role.agency_id, role.name, role.description, 1]
-      })
+        values: [role.agency_id, role.name, role.description, 1],
+      });
 
-      const insertedRole = smth1.rows[0]
+      const insertedRole = smth1.rows[0];
 
       const rolesPermissions = await client.query({
-        text: "INSERT INTO roles_permissions () values () returning *",
-        values: []
-      })
-    })
+        text: 'INSERT INTO roles_permissions () values () returning *',
+        values: [],
+      });
+    });
     const res = await this.conn.query<Role>({
       text: 'INSERT INTO roles',
       values: [role.name],
@@ -48,10 +48,10 @@ export class RolesService {
         name = COALESCE($1, name),
         description = COALESCE($2, description),
       WHERE id = $3`,
-      values: [role.name, role.description, id]
-    })
+      values: [role.name, role.description, id],
+    });
 
-    return res.rows[0]
+    return res.rows[0];
   }
 
   async softDelete(id: number): Promise<void> {
@@ -64,7 +64,7 @@ export class RolesService {
   async hardDelete(id: number): Promise<void> {
     await this.conn.query({
       text: 'DELETE FROM roles WHERE id = $1',
-      values: [id]
-    })
+      values: [id],
+    });
   }
 }

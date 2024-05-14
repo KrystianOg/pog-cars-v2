@@ -8,8 +8,8 @@ import {
   Body,
   ParseIntPipe,
 } from '@nestjs/common';
-import { RolesService} from './roles.service';
-import { Role, CreateRoleDto} from './roles.schema';
+import { RolesService } from './roles.service';
+import { Role, CreateRoleDto } from './roles.schema';
 
 import { Permissions } from '../roles/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
@@ -35,7 +35,9 @@ export class RolesController {
 
   @Permissions('manage_roles')
   @Post()
-  create(@Body(new ZodValidationPipe(roleCreateSchema)) role: CreateRoleDto): Promise<Role> {
+  create(
+    @Body(new ZodValidationPipe(roleCreateSchema)) role: CreateRoleDto,
+  ): Promise<Role> {
     return this.rolesService.create(role);
   }
 

@@ -16,7 +16,6 @@ export type Car = z.infer<typeof carSchema>;
 
 export const carCreateSchema = carSchema.omit({
   id: true,
-})
+});
 
 export type CreateCarDto = z.infer<typeof carCreateSchema>;
-

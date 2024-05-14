@@ -50,7 +50,7 @@ export class AuthController {
       httpOnly: true,
     });
 
-    response.cookie('access_token', 'Bearer ' + credentials.access_token );
+    response.cookie('access_token', 'Bearer ' + credentials.access_token);
   }
 
   @HttpCode(HttpStatus.CREATED)
@@ -63,9 +63,9 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('logout')
-  async signOut(@Res({passthrough: true}) response: Response) {
-    response.clearCookie('refresh_token')
-    response.clearCookie('access_token')
+  async signOut(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('refresh_token');
+    response.clearCookie('access_token');
   }
 
   @HttpCode(HttpStatus.OK)
@@ -73,13 +73,13 @@ export class AuthController {
   @Get('refresh-token')
   async refreshToken(
     @Req() req: Request,
-    @Res({passthrough: true}) response: Response
+    @Res({ passthrough: true }) response: Response,
   ): Promise<void> {
-   const refresh_token = req.cookies.refresh_token
+    const refresh_token = req.cookies.refresh_token;
 
-    const {access_token} = await this.authService.refreshtoken(refresh_token)
+    const { access_token } = await this.authService.refreshtoken(refresh_token);
 
-    response.cookie('access_token', 'Bearer ' + access_token)
+    response.cookie('access_token', 'Bearer ' + access_token);
   }
 
   /**

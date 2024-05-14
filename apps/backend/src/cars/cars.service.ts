@@ -70,7 +70,7 @@ export class CarsService {
         car.year,
         car.model,
         car.make,
-        id
+        id,
       ],
     });
 

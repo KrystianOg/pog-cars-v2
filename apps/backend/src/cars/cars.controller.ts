@@ -5,7 +5,7 @@ import {
   Post,
   Patch,
   Param,
-  Body, 
+  Body,
   ParseIntPipe,
 } from '@nestjs/common';
 import { CarsService } from './cars.service';
@@ -33,15 +33,17 @@ export class CarsController {
 
   @Permissions('manage_cars')
   @Post()
-  create(@Body(new ZodValidationPipe(carCreateSchema)) car: CreateCarDto): Promise<Car> {
+  create(
+    @Body(new ZodValidationPipe(carCreateSchema)) car: CreateCarDto,
+  ): Promise<Car> {
     return this.carsService.create(car);
   }
 
   @Permissions('manage_cars')
   @Patch(':id')
   update(
-    @Param('id', new ParseIntPipe()) id: number, 
-    @Body(new ZodValidationPipe(carCreateSchema)) car: CreateCarDto
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body(new ZodValidationPipe(carCreateSchema)) car: CreateCarDto,
   ): Promise<Car> {
     return this.carsService.update(id, car);
   }

@@ -9,8 +9,8 @@
 .content-container {
   width: fit-content;
   height: fit-content;
-  z-index:1;
-  position:relative;
+  z-index: 1;
+  position: relative;
   border: solid 400px red;
   border-radius: 1rem;
 }
