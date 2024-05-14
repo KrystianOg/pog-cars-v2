@@ -10,6 +10,12 @@
   color: var(--primary-foreground);
 }
 
+.button[disabled] {
+  background-color: var(--muted);
+  cursor: unset;
+  color: var(--muted-foreground);
+}
+
 .destructive {
   background-color: var(--destructive);
   color: var(--destructive-foreground);
