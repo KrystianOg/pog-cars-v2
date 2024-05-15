@@ -13,13 +13,13 @@ import { Role, CreateRoleDto } from './roles.schema';
 
 import { Permissions } from '../roles/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { ZodValidationPipe } from 'src/utils/zod/validation.pipe';
+import { ZodValidationPipe } from '../utils/zod/validation.pipe';
 import { roleCreateSchema } from './roles.schema';
 
 @ApiTags('Roles')
 @Controller('roles')
 export class RolesController {
-  constructor(private rolesService: RolesService) {}
+  constructor(private rolesService: RolesService) { }
 
   @Permissions('manage_roles')
   @Get()

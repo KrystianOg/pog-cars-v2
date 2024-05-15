@@ -9,20 +9,24 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { CarsService } from './cars.service';
-import { Car, carCreateSchema, CreateCarDto } from './cars.schema';
+import { Car, carSchema, CreateCarDto } from './cars.schema';
 import { Permissions } from '../roles/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { ZodValidationPipe } from 'src/utils/zod/validation.pipe';
+import { ZodValidationPipe } from '../utils/zod/validation.pipe';
+import { Pagination, paginationSchema } from '../utils/zod/pagination.schema';
 
 @ApiTags('Cars')
 @Controller('cars')
 export class CarsController {
-  constructor(private carsService: CarsService) {}
+  constructor(private carsService: CarsService) { }
 
   @Permissions('view_cars')
   @Get()
-  findAll(): Promise<Car[]> {
-    return this.carsService.findAll();
+  findAll(
+    @Param(new ZodValidationPipe(paginationSchema)) params: Pagination,
+    orderBy: keyof Car,
+  ): Promise<Car[]> {
+    return this.carsService.findAll(params, orderBy);
   }
 
   @Permissions('view_cars')
@@ -34,7 +38,7 @@ export class CarsController {
   @Permissions('manage_cars')
   @Post()
   create(
-    @Body(new ZodValidationPipe(carCreateSchema)) car: CreateCarDto,
+    @Body(new ZodValidationPipe(carSchema)) car: CreateCarDto,
   ): Promise<Car> {
     return this.carsService.create(car);
   }
@@ -43,7 +47,7 @@ export class CarsController {
   @Patch(':id')
   update(
     @Param('id', new ParseIntPipe()) id: number,
-    @Body(new ZodValidationPipe(carCreateSchema)) car: CreateCarDto,
+    @Body(new ZodValidationPipe(carSchema)) car: CreateCarDto,
   ): Promise<Car> {
     return this.carsService.update(id, car);
   }

@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
-import { PG_CONNECTION } from 'src/db/db.module';
+import { PG_CONNECTION } from '../db/db.module';
 import { Rental } from './rentals.schema';
 
 @Injectable()
 export class RentalsService {
-  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) { }
 
   async findAll() {
     const res = await this.conn.query<Rental>({

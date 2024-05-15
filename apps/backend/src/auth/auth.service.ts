@@ -2,16 +2,16 @@ import { Injectable, Inject, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/users/users.schema';
-import { PG_CONNECTION } from 'src/db/db.module';
+import { User } from '../users/users.schema';
+import { PG_CONNECTION } from '../db/db.module';
 import { Pool } from 'pg';
-import { transaction } from 'src/db/utils/transaction';
+import { transaction } from '../db/utils/transaction';
 
-type SignInProps =
+export type SignInProps =
   | {
-      email: string;
-      password: string;
-    }
+    email: string;
+    password: string;
+  }
   | User;
 
 function isUser(props: SignInProps): props is User {
@@ -24,7 +24,7 @@ export class AuthService {
     @Inject(PG_CONNECTION) private conn: Pool,
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signIn(
     props: SignInProps,

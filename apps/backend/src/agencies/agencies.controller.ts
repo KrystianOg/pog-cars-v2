@@ -13,12 +13,12 @@ import { Agency, CreateAgencyDto, agencyCreateSchema } from './agencies.schema';
 
 import { Permissions } from '../roles/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { ZodValidationPipe } from 'src/utils/zod/validation.pipe';
+import { ZodValidationPipe } from '../utils/zod/validation.pipe';
 
 @ApiTags('Agencies')
 @Controller('agencies')
 export class AgenciesController {
-  constructor(private agenciesService: AgenciesService) {}
+  constructor(private agenciesService: AgenciesService) { }
 
   @Permissions('view_agency')
   @Get()

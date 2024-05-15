@@ -8,7 +8,7 @@ import {
 import { User, userCreateSchema, userUpdateSchema } from './users.schema';
 import type { UserCreate, UserUpdate } from './users.schema';
 import * as bcrypt from 'bcrypt';
-import { PG_CONNECTION } from 'src/db/db.module';
+import { PG_CONNECTION } from '../db/db.module';
 import { Pool, DatabaseError } from 'pg';
 
 enum Code {
@@ -18,7 +18,7 @@ enum Code {
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) { }
 
   async findOne(email: string | number): Promise<User> {
     // TODO: make sure that this | number doesn't break anything

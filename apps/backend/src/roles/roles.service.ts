@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Role, CreateRoleDto } from './roles.schema';
-import { PG_CONNECTION } from 'src/db/db.module';
+import { PG_CONNECTION } from '../db/db.module';
 import { Pool } from 'pg';
-import { transaction } from 'src/db/utils/transaction';
+import { transaction } from '../db/utils/transaction';
 
 @Injectable()
 export class RolesService {
-  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) { }
 
   async findAll(): Promise<Role[]> {
     const res = await this.conn.query<Role>({

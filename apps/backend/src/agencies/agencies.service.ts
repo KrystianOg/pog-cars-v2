@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { Agency, CreateAgencyDto } from './agencies.schema';
-import { PG_CONNECTION } from 'src/db/db.module';
+import { PG_CONNECTION } from '../db/db.module';
 import { Pool } from 'pg';
 
 @Injectable()
 export class AgenciesService {
-  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) { }
 
   async create(agency: CreateAgencyDto): Promise<Agency> {
     const address = agency.address;

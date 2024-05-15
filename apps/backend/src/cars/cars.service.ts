@@ -1,15 +1,16 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import type { Car, CreateCarDto } from './cars.schema';
-import { PG_CONNECTION } from 'src/db/db.module';
+import type { CreateCarDto, Car } from './cars.schema';
+import { PG_CONNECTION } from '../db/db.module';
 import { Pool } from 'pg';
+import { Pagination } from '../utils/zod/pagination.schema';
 
 @Injectable()
 export class CarsService {
-  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) { }
 
   async create(car: CreateCarDto): Promise<Car> {
     const res = await this.conn.query<Car>({
-      text: 'INSERT INTO cars (mileage, horsepower, seats, drivetrain, price, year, model, make) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      text: 'INSERT INTO cars (mileage, horsepower, seats, drivetrain, price, year, model, make) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, mileage, horsepower, seats, drivetrain, price, year, model, make',
       values: [
         car.mileage,
         car.horsepower,
@@ -25,9 +26,15 @@ export class CarsService {
     return res.rows[0];
   }
 
-  async findAll(): Promise<Car[]> {
+  async findAll(
+    { page, pageSize }: Pagination,
+    orderBy: keyof Car = 'price',
+  ): Promise<Car[]> {
+    const offset = Math.floor((page - 1) * pageSize);
+
     const res = await this.conn.query<Car>({
-      text: 'SELECT * FROM cars',
+      text: 'SELECT * FROM cars ORDER BY $1 ASC LIMIT $2 OFFSET $3',
+      values: [orderBy, pageSize, offset],
     });
 
     return res.rows;
@@ -35,17 +42,14 @@ export class CarsService {
 
   async findOne(id: number): Promise<Car> {
     const res = await this.conn.query<Car>({
-      text: 'SELECT * FROM cars WHERE id = $1',
+      text: 'SELECT id, mileage, horsepower, seats, drivetrain, price, year, model, make FROM cars WHERE id = $1',
       values: [id],
     });
 
-    // TODO: what if result was not found ??
-
-    const row = res.rows[0];
-
-    if (!row) {
+    if (!res.rowCount) {
       throw new NotFoundException();
     }
+
     return res.rows[0];
   }
 
@@ -60,7 +64,7 @@ export class CarsService {
         year = COALESCE($6, year),
         model = COALESCE($7, model),
         make = COALESCE($8, make)
-      WHERE id =$9 RETURNING *`,
+      WHERE id =$9 RETURNING id, mileage, horsepower, seats, drivetrain, price, year, model, make`,
       values: [
         car.mileage,
         car.horsepower,
@@ -78,16 +82,23 @@ export class CarsService {
   }
 
   async softDelete(id: number): Promise<void> {
-    await this.conn.query({
+    const res = await this.conn.query({
       text: 'UPDATE cars SET deleted_at = NOW() WHERE id = $1',
       values: [id],
     });
+
+    if (!res.rowCount) {
+      throw new NotFoundException();
+    }
   }
 
   async hardDelete(id: number): Promise<void> {
-    await this.conn.query({
+    const res = await this.conn.query({
       text: 'DELETE FROM cars WHERE id = $1',
       values: [id],
     });
+    if (!res.rowCount) {
+      throw new NotFoundException();
+    }
   }
 }

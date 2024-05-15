@@ -1,11 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
+import { SignInProps } from './auth.service';
+import { DbModule } from '../db/db.module';
+
+const userData1: SignInProps = {
+  email: 'test@mail.com',
+  password: 'Testpassword1',
+};
 
 describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [DbModule],
       providers: [AuthService],
     }).compile();
 
@@ -16,14 +24,24 @@ describe('AuthService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should register new user', () => {
-    const res = await service.signUp('test@mail.com', 'Testpassword1');
+  describe('sign in', () => {
+    it('should login existing user', async () => {
+      const res = await service.signIn(userData1);
+      expect(res).toHaveReturned();
+    });
 
-    expect(res).toHaveProperty('access_token');
+    it('should reject logging user', async () => {
+      const res = await service.signIn({
+        ...userData1,
+        password: 'Testpassword2',
+      });
+      expect(res).toThrow();
+    });
   });
 
-  it('should login existing user', () => {
-    const res = await service.signIn('test@mail.com', 'Testpassword2');
-    expect(res).toHaveProperty('access_token');
+  it('should register new user', async () => {
+    const res = await service.signUp('test@mail.com', 'Testpassword1');
+
+    expect(res).toHaveReturned();
   });
 });

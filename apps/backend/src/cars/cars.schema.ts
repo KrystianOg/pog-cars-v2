@@ -1,21 +1,17 @@
 import { z } from 'zod';
+import { MAX_INT_32 } from '../constants/int';
 
 export const carSchema = z.object({
-  id: z.number().min(0),
-  mileage: z.number().min(0),
-  horsepower: z.number().min(0),
-  seats: z.number().min(1),
+  mileage: z.number().nonnegative().max(MAX_INT_32),
+  horsepower: z.number().nonnegative().max(20_000),
+  seats: z.number().positive().max(300),
   drivetrain: z.enum(['FWD', 'RWD', '4WD', 'AWD']),
-  price: z.number().min(0),
-  year: z.number().min(1886),
-  model: z.string().max(64),
-  make: z.string().max(64),
+  price: z.number().max(50_000).nonnegative(), // TODO: extract price to separate column
+  year: z.number().min(1886).max(new Date().getFullYear()),
+  model: z.string().max(64).min(1),
+  make: z.string().max(64).min(1),
 });
 
-export type Car = z.infer<typeof carSchema>;
+export type CreateCarDto = z.infer<typeof carSchema>;
 
-export const carCreateSchema = carSchema.omit({
-  id: true,
-});
-
-export type CreateCarDto = z.infer<typeof carCreateSchema>;
+export type Car = CreateCarDto & { id: number };
