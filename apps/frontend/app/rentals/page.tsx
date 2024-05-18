@@ -1,29 +1,28 @@
+import { Calendar } from "./components/calendar";
 import { RentDialog } from "./components/rent-dialog";
 
-const rentalsMock = [
+import type { EventInput } from "@fullcalendar/core";
+const mockData: EventInput = [
   {
-    id: 1,
-    car: {
-      id: 1,
+    id: "1",
+    title: "Opel Astra 2020",
+    start: "2024-05-15T11:00:00",
+    end: "2024-05-19T14:00:00",
+    editable: true,
+    extendedProps: {
+      carId: 2,
     },
-    user: {
-      id: 1,
-    },
-    start: "2024-03-01T10:00:03",
-    end: "2024-03-15T12:00:00",
-    price: 200000,
+    // backgroundColor: "var(--muted)",
   },
   {
-    id: 2,
-    car: {
-      id: 2,
+    id: "2",
+    title: "Nissan Juke 2016",
+    start: "2024-05-15T09:00:00",
+    end: "2024-05-15T18:00:00",
+    editable: true,
+    extendedProps: {
+      carId: 1,
     },
-    user: {
-      id: 1,
-    },
-    start: "2024-01-01T10:00:02",
-    end: "2024-01-17T16:10:00",
-    price: 325600,
   },
 ];
 
@@ -31,11 +30,14 @@ export default function Rentals() {
   return (
     <main>
       <RentDialog />
-      <ol>
+      {/* TODO: display either list or calendar */}
+      {/* <ol>
         {rentalsMock.map((rental) => (
           <li key={rental.id}>{JSON.stringify(rental)}</li>
         ))}
-      </ol>
+      </ol> */}
+
+      <Calendar events={mockData} />
     </main>
   );
 }
