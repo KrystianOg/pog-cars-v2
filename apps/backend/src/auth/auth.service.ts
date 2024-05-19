@@ -42,7 +42,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
     return {
-      access_token: this.getToken('5m', user, this.jwtService),
+      access_token: this.getToken('60m', user, this.jwtService),
       refresh_token: this.getToken('60d', user, this.jwtService),
     };
   }

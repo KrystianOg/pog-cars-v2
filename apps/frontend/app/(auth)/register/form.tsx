@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { post } from "@/lib/fetch";
 import { Button } from "@/components/ui/button";
+import styles from "./form.module.css";
 
 const registerFormSchema = z.object({
   email: z.string().email(),
@@ -18,11 +19,7 @@ interface RegisterFormProps {
   defaultValues?: Partial<RegisterForm>;
 }
 export function RegisterForm(props: RegisterFormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, formState } = useForm({
     defaultValues: props.defaultValues,
     resolver: zodResolver(registerFormSchema),
   });
@@ -42,7 +39,7 @@ export function RegisterForm(props: RegisterFormProps) {
     }
   });
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className={styles.form}>
       <Input id="email" placeholder="Email" {...register("email")} required />
       <Input
         id="password"
@@ -51,8 +48,9 @@ export function RegisterForm(props: RegisterFormProps) {
         {...register("password")}
         required
       />
-      {errors.root && <span>This field is smth {errors.root?.message}</span>}
-      <Button type="submit">Register</Button>
+      <Button type="submit" disabled={!formState.isDirty || !formState.isValid}>
+        Register
+      </Button>
     </form>
   );
 }

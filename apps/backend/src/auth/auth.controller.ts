@@ -48,9 +48,12 @@ export class AuthController {
 
     response.cookie('refresh_token', 'Bearer ' + credentials.refresh_token, {
       httpOnly: true,
+      sameSite: 'strict',
     });
 
-    response.cookie('access_token', 'Bearer ' + credentials.access_token);
+    response.cookie('access_token', 'Bearer ' + credentials.access_token, {
+      sameSite: 'strict',
+    });
   }
 
   @HttpCode(HttpStatus.CREATED)
@@ -70,7 +73,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Public()
-  @Get('refresh-token')
+  @Get('refresh')
   async refreshToken(
     @Req() req: Request,
     @Res({ passthrough: true }) response: Response,
