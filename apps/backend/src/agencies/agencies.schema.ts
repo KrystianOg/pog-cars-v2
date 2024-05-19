@@ -6,7 +6,6 @@ export type Country = z.infer<typeof countryEnum>;
 
 // address schema related
 const addressSchema = z.object({
-  id: z.number().min(0),
   street: z.string(),
   city: z.string(),
   state: z.string(),
@@ -14,25 +13,26 @@ const addressSchema = z.object({
   country: countryEnum,
 });
 
-export type Address = z.infer<typeof addressSchema>;
+export type CreateAddressDto = z.infer<typeof addressSchema>;
+export type Address = CreateAddressDto & { id: number };
 
-export const addressCreateSchema = addressSchema.omit({
-  id: true,
-});
+export const configSchema = z
+  .object({
+    backgroundColor: z.string().regex(/^#?([a-f0-9]{6}|[a-f0-9]{3})$/), // hex at first
+  })
+  .partial();
 
-export type CreateAddressDto = z.infer<typeof addressCreateSchema>;
+export type CreateConfigDto = z.infer<typeof configSchema>;
+
+export type AgencyConfig = z.infer<typeof configSchema>;
 
 // agency schema related
-const agencySchema = z.object({
-  id: z.number().min(0),
+export const agencySchema = z.object({
   name: z.string().max(128),
   address: addressSchema,
+  config: configSchema.optional(),
 });
 
-export type Agency = z.infer<typeof agencySchema>;
+export type CreateAgencyDto = z.infer<typeof agencySchema>;
 
-export const agencyCreateSchema = agencySchema.omit({
-  id: true,
-});
-
-export type CreateAgencyDto = z.infer<typeof agencyCreateSchema>;
+export type Agency = CreateAgencyDto & { id: number };

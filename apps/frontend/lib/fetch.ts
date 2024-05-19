@@ -1,3 +1,6 @@
+"use server";
+import { cookies } from "next/headers";
+
 const defaultParams: RequestInit = {
   method: "GET",
   headers: {
@@ -6,66 +9,36 @@ const defaultParams: RequestInit = {
   credentials: "include",
 };
 
-/** related article: https://www.30secondsofcode.org/js/s/parse-or-serialize-cookie/ */
-const parseCookie = (str: string) =>
-  str
-    .split(";")
-    .map((v) => v.split("="))
-    .reduce(
-      (acc, [key, value]) => {
-        if (!value) return acc;
-        acc[decodeURIComponent(key?.trim())] = decodeURIComponent(
-          value?.trim(),
-        );
-        return acc;
-      },
-      {} as Record<string, string>,
-    );
-
-function parseJwt(token: string) {
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split("")
-      .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-      .join(""),
-  );
-
-  return JSON.parse(jsonPayload);
-}
+const refreshTokenWrapper = async (): Promise<void> => { };
 
 const refreshToken = async (): Promise<void> => {
-  if (typeof window === "undefined") return;
+  const cookieStore = cookies();
 
-  const cookie = parseCookie(document.cookie);
-
+  const access_token = cookieStore.get("access_token")?.value;
+  const refresh_token = cookieStore.get("refresh_token")?.value;
   /* it means that user is logged out */
-  if (!cookie.access_token) return;
-
-  const [type, token] = cookie.access_token?.split(" ") ?? [];
-
-  if (type !== "Bearer") return;
-  const data = parseJwt(token);
-  // get expiration timestamp from access_token
-  if (new Date().getTime() > parseInt(data.exp) * 1000) {
-    const refreshTokenUrl = new URL(
-      "/refresh-token",
-      process.env.NEXT_PUBLIC_BACKEND_URL,
-    );
-    await fetch(refreshTokenUrl);
-  }
+  // FIXME: or throw an error ? - log out
+  if (!access_token)
+    if (false) {
+      // TODO: check expiration time
+      const refreshTokenUrl = new URL(
+        "/refresh-token",
+        process.env.NEXT_PUBLIC_BACKEND_URL,
+      );
+      await fetch(refreshTokenUrl);
+    }
 };
 
 const _fetch = async (subpath: string, init?: Parameters<typeof fetch>[1]) => {
   const backendUrl = new URL(subpath, process.env.NEXT_PUBLIC_BACKEND_URL);
 
-  await refreshToken();
-
+  const access_token = cookies().get("access_token")?.value;
+  // await refreshToken();
   return fetch(backendUrl, {
     ...defaultParams,
     headers: {
       ...defaultParams.headers,
+      ...(access_token ? { Authorization: access_token } : {}),
     },
     ...init,
   });

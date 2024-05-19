@@ -5,7 +5,7 @@ import { Pool } from 'pg';
 
 @Injectable()
 export class AgenciesService {
-  constructor(@Inject(PG_CONNECTION) private conn: Pool) { }
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
 
   async create(agency: CreateAgencyDto): Promise<Agency> {
     const address = agency.address;

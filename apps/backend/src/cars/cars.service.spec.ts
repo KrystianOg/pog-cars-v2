@@ -28,15 +28,15 @@ describe('CarsService', () => {
   });
 
   it('should create new car', async () => {
-    const { id, ...res } = await service.create(mockCar);
-    expect(res).toStrictEqual(mockCar);
+    const res = await service.create(mockCar);
+    expect(res).toStrictEqual({ ...mockCar, id: res.id });
   });
 
   describe('Find one', () => {
     it('should find specific car', async () => {
       const { id } = await service.create(mockCar);
-      const { id: _, ...res } = await service.findOne(id);
-      expect(res).toStrictEqual(mockCar);
+      const res = await service.findOne(id);
+      expect(res).toStrictEqual({ ...mockCar, id });
     });
 
     it.failing('should not find a car', async () => {

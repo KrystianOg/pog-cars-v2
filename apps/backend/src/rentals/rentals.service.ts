@@ -5,7 +5,7 @@ import { Rental } from './rentals.schema';
 
 @Injectable()
 export class RentalsService {
-  constructor(@Inject(PG_CONNECTION) private conn: Pool) { }
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
 
   async findAll() {
     const res = await this.conn.query<Rental>({

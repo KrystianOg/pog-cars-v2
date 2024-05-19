@@ -3,10 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CarsModule } from './cars/cars.module';
-import { AgenciesService } from './agencies/agencies.service';
-import { AgenciesController } from './agencies/agencies.controller';
 import { AgenciesModule } from './agencies/agencies.module';
-import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
@@ -14,6 +11,7 @@ import { DbModule } from './db/db.module';
 import { RentalsModule } from './rentals/rentals.module';
 import { envSchema } from './env.schema';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -37,8 +35,9 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     }),
     DbModule,
     RentalsModule,
+    EventsModule,
   ],
-  controllers: [AppController, AgenciesController],
-  providers: [AppService, AgenciesService, UsersService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

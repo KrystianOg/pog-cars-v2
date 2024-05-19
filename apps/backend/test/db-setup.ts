@@ -4,21 +4,23 @@ const DIRECTORY = './src/db/migrations/';
 console.log('PREPARING DB');
 
 timeIt('MIGRATE DOWN', () => {
-  let fileContents = readFiles(DIRECTORY, 'down');
+  const fileContents = readFiles(DIRECTORY, 'down');
+
+  for (const content of fileContents) {
+  }
 });
 
 timeIt('MIGRATE UP', () => {
   const fileContents = readFiles(DIRECTORY, 'up');
 
   for (const content of fileContents) {
-    // console.log('file content: ' + fileContents);
   }
 });
 
-timeIt('SEED', () => { });
+timeIt('SEED', () => {});
 
 function readFiles(dirname: string, kind: 'down' | 'up'): string[] {
-  let files = readdirSync(dirname);
+  const files = readdirSync(dirname);
 
   const filteredFiles = files
     .map(

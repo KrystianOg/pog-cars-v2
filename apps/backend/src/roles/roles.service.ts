@@ -6,7 +6,7 @@ import { transaction } from '../db/utils/transaction';
 
 @Injectable()
 export class RolesService {
-  constructor(@Inject(PG_CONNECTION) private conn: Pool) { }
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
 
   async findAll(): Promise<Role[]> {
     const res = await this.conn.query<Role>({
@@ -20,7 +20,7 @@ export class RolesService {
    * Roles are created per agency
    */
   async create(role: CreateRoleDto): Promise<Role> {
-    const smth = transaction(this.conn, async (client) => {
+    await transaction(this.conn, async (client) => {
       const smth1 = await client.query<Role>({
         text: 'INSERT INTO roles (agency_id, name, description, created_by) values ($1, $2, $3, $4) returning *',
         // TODO: change the '1' to current_user.id
@@ -29,9 +29,9 @@ export class RolesService {
 
       const insertedRole = smth1.rows[0];
 
-      const rolesPermissions = await client.query({
-        text: 'INSERT INTO roles_permissions () values () returning *',
-        values: [],
+      await client.query({
+        text: 'INSERT INTO roles_permissions () values ()',
+        values: [insertedRole.id],
       });
     });
     const res = await this.conn.query<Role>({

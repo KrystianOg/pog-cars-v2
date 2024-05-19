@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
+/**
+ * Used as query params so coerce from string
+ */
 export const paginationSchema = z.object({
-  page: z.number().positive().optional().default(1),
-  pageSize: z
-    .union([z.literal(10), z.literal(25), z.literal(50), z.literal(100)])
-    .optional()
-    .default(25),
+  page: z.coerce.number().positive().default(1),
+  pageSize: z.coerce.number().min(10).max(100).default(25),
 });
 
 export type Pagination = z.infer<typeof paginationSchema>;

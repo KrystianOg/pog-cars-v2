@@ -1,7 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AgenciesController } from './agencies.controller';
 import { AgenciesService } from './agencies.service';
-import { agencies } from './agencies.mocks';
+import { CreateAgencyDto } from './agencies.schema';
+
+const mockAgency: CreateAgencyDto = {
+  name: 'Test agency',
+  address: {
+    street: 'Grosse',
+    city: 'Warsaw',
+    state: 'lkasjdklfj',
+    postal_code: 'laksjdflkasdf',
+    country: 'PL',
+  },
+  config: undefined,
+};
 
 describe('AgenciesController', () => {
   let controller: AgenciesController;
@@ -21,7 +33,7 @@ describe('AgenciesController', () => {
     it('should return as array of agencies', async () => {
       jest.spyOn(service, 'findAll').mockImplementation(() => {
         return new Promise((resolve) => {
-          process.nextTick(() => resolve(agencies));
+          process.nextTick(() => resolve([mockAgency, mockAgency]));
         });
       });
       const data = await controller.findAll();

@@ -39,7 +39,8 @@ const fails: CreateCarDto[] = [
     mileage: MAX_INT_32 + 1,
     horsepower: 20_001,
     seats: 301,
-    drivetrain: 'SOME2' as CreateCarDto['drivetrain'],
+    // @ts-expect-error cause we want to pass different value on purpose
+    drivetrain: 'SOME2',
     price: 50_001,
     year: new Date().getFullYear() + 1,
     model: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellu',

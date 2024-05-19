@@ -1,20 +1,16 @@
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
-import { AuthService } from '../src/auth/auth.service';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { DbService } from '../src/db/db.service';
 
 let app: INestApplication;
-let authService: AuthService;
-// let dbService: DbService;
 
 beforeAll(async () => {
   const moduleFixture = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
 
-  authService = moduleFixture.get<AuthService>(AuthService);
+  // authService = moduleFixture.get<AuthService>(AuthService);
   // dbService = moduleFixture.get<DbService>(DbService);
 
   app = moduleFixture.createNestApplication();
@@ -41,7 +37,7 @@ describe('Authentication', () => {
   };
 
   it('User should be able to signup', async () => {
-    return req().post('/register').auth().send(credentials).expect(201);
+    return req().post('/register').send(credentials).expect(201);
   });
 
   describe('Login', () => {

@@ -1,14 +1,15 @@
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import { CarForm } from "./components/car-form";
-import { type Car } from "../../../backend/src/cars/cars.schema";
+import { AgencyForm } from "./components/agency-form";
+import { type Agency } from "../../../backend/src/agencies/agencies.schema";
 import { get } from "@/lib/fetch";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export const revalidate = 0;
+export const revalidate = 300;
 
-async function fetchData(): Promise<Car[]> {
+async function fetchData(): Promise<Agency[]> {
   const res = await get("cars");
+  console.log(JSON.stringify(res));
   if (!res || res.status >= 400) {
     redirect("/");
   }
@@ -19,7 +20,7 @@ async function fetchData(): Promise<Car[]> {
 }
 
 export default async function CarsPage() {
-  const cars = await fetchData();
+  const agencies = await fetchData();
 
   return (
     <main>
@@ -27,13 +28,13 @@ export default async function CarsPage() {
       <Dialog>
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
-          <CarForm />
+          <AgencyForm />
         </DialogContent>
       </Dialog>
       {"Cars: "}
-      {cars.map((car) => (
-        <Link href={`/cars/${car.id}`} key={car.id}>
-          {car.make} {car.model}
+      {agencies.map((agency) => (
+        <Link href={`/cars/${agency.id}`} key={agency.id}>
+          {JSON.stringify(agency)}
         </Link>
       ))}
     </main>

@@ -8,3 +8,9 @@ node_modules
 !.env.example
 
 .vscode
+
+# turbo
+.turbo
+build/**
+dist/**
+.next/**

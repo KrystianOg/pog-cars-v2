@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import styles from "./car-form.module.css";
 
-import { carCreateSchema as carFormSchema } from "../../../../backend/src/cars/cars.schema";
-import { useEffect } from "react";
+import { carSchema as carFormSchema } from "../../../../backend/src/cars/cars.schema";
 import { Label } from "@/components/ui/label";
 
 interface CarFormProps {
@@ -22,15 +21,9 @@ export function CarForm({ defaultValues }: CarFormProps) {
     defaultValues,
   });
 
-  console.log("form state", formState);
-
   const onSubmit = handleSubmit((values) => {
-    console.log("car form values", values);
+    // console.log("car form values", values);
   });
-
-  useEffect(() => {
-    console.log(formState.isValid, formState.errors);
-  }, [formState]);
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>

@@ -23,6 +23,7 @@ export class RolesGuard implements CanActivate {
     return this.matchPermissions(permissions, user);
   }
 
+  // eslint-disable-next-line
   private matchPermissions(permissions: Permission[], userId: number): boolean {
     return true;
   }

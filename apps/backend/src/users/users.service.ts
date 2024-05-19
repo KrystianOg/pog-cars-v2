@@ -18,7 +18,7 @@ enum Code {
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(PG_CONNECTION) private conn: Pool) { }
+  constructor(@Inject(PG_CONNECTION) private conn: Pool) {}
 
   async findOne(email: string | number): Promise<User> {
     // TODO: make sure that this | number doesn't break anything

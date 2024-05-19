@@ -2,14 +2,18 @@
 
 # migrate based on --up (default) or --down flag
 kind="up"
-while getopts u:d:p: flag
+database="postgres"
+while getopts u:p:b:e: flag
 do
   case "${flag}" in
     u) ;;
     d) kind="down";;
     p) dir=${OPTARG};;
+    e) export NODE_ENV=${OPTARG}
   esac
 done
+
+source ../../../.env.$NODE_ENV.local
 
 echo "Checking validity of ${kind} migrations ..."
 
@@ -23,6 +27,6 @@ for file in $(find ${dir}/*.${kind}.sql -printf "%f\n" | sort -n -t '_' $([[ "$k
   echo "migrating ${file}"
   # psql ... --file "$file" --single-transaction
   # TODO: handle db errors
-  psql postgresql://admin:admin1234@localhost:5432/postgres -1 -f ${dir}/${file}
+  psql postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB -1 -f ${dir}/${file}
 done;
 

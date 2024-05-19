@@ -1,6 +1,8 @@
 import { get } from "@/lib/fetch";
 import type { Car } from "../../../../backend/src/cars/cars.schema";
-import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
+
+export const revalidate = 0;
 
 interface CarParams {
   params: {
@@ -12,7 +14,7 @@ async function fetchData(id: string | number): Promise<Car> {
   const res = await get(`cars/${id}`);
 
   if (!res || res.status === 404) {
-    throw new Error();
+    redirect("/cars");
   }
   return await res.json();
 }
@@ -21,15 +23,14 @@ export default async function Car({ params }: CarParams) {
   const carId = parseInt(params.id);
 
   if (isNaN(carId)) {
-    throw new Error(`Not a valid id.`);
+    redirect("/cars");
   }
 
   const car = await fetchData(carId);
 
   return (
     <main>
-      Something about car {car.id}
-      <Button onClick={() => fetchData(carId)}>Click</Button>
+      <p>Car data: {JSON.stringify(car)}</p>
     </main>
   );
 }

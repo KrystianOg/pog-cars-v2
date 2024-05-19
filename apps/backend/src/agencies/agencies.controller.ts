@@ -9,7 +9,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { AgenciesService } from './agencies.service';
-import { Agency, CreateAgencyDto, agencyCreateSchema } from './agencies.schema';
+import { Agency, CreateAgencyDto, agencySchema } from './agencies.schema';
 
 import { Permissions } from '../roles/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
@@ -18,7 +18,7 @@ import { ZodValidationPipe } from '../utils/zod/validation.pipe';
 @ApiTags('Agencies')
 @Controller('agencies')
 export class AgenciesController {
-  constructor(private agenciesService: AgenciesService) { }
+  constructor(private agenciesService: AgenciesService) {}
 
   @Permissions('view_agency')
   @Get()
@@ -35,7 +35,7 @@ export class AgenciesController {
   @Permissions('create_agency')
   @Post()
   create(
-    @Body(new ZodValidationPipe(agencyCreateSchema)) agency: CreateAgencyDto,
+    @Body(new ZodValidationPipe(agencySchema)) agency: CreateAgencyDto,
   ): Promise<Agency> {
     return this.agenciesService.create(agency);
   }
@@ -44,7 +44,7 @@ export class AgenciesController {
   @Patch(':id')
   update(
     @Param('id', new ParseIntPipe()) id: number,
-    @Body(new ZodValidationPipe(agencyCreateSchema)) agency: CreateAgencyDto,
+    @Body(new ZodValidationPipe(agencySchema)) agency: CreateAgencyDto,
   ): Promise<Agency> {
     return this.agenciesService.update(id, agency);
   }

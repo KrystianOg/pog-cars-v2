@@ -19,7 +19,7 @@ import { roleCreateSchema } from './roles.schema';
 @ApiTags('Roles')
 @Controller('roles')
 export class RolesController {
-  constructor(private rolesService: RolesService) { }
+  constructor(private rolesService: RolesService) {}
 
   @Permissions('manage_roles')
   @Get()
