@@ -19,12 +19,12 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@backend/*": ["../backend/src/*"]
+      "@backend/*": ["../backend/*"]
     }
   },
   "references": [
     {
-      "path": "../backend/src"
+      "path": "../backend"
     }
   ],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

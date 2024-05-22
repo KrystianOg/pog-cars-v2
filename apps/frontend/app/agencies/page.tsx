@@ -1,6 +1,6 @@
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { AgencyForm } from "./components/agency-form";
-import { type Agency } from "../../../backend/src/agencies/agencies.schema";
+import { type Agency } from "@backend/src/agencies/agencies.schema";
 import { get } from "@/lib/fetch";
 import Link from "next/link";
 import { redirect } from "next/navigation";

@@ -4,13 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "node .husky/install.mjs"
+    "prepare": "node .husky/install.mjs",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "prettier": "turbo run prettier",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "rurbo run test:e2e"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "husky": "^9.0.11"
+    "husky": "^9.0.11",
+    "turbo": "^1.13.3"
   }
 }

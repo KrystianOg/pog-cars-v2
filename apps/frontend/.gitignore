@@ -41,3 +41,7 @@ next-env.d.ts
 
 # turbopack
 .turbo
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

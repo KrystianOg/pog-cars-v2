@@ -1,3 +1,19 @@
 {
-  "$schema": "https://turbo.build/schema.json"
+  "baseBranch": "origin/main",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"]
+    },
+    "watch": {},
+    "prettier": {},
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
+    },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "test:e2e": {
+      "dependsOn": ["^build"]
+    }
+  }
 }
